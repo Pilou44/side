@@ -3,6 +3,7 @@ package com.wechantloup.side.dagger.components
 import android.app.Application
 import com.wechantloup.side.dagger.modules.ActivityBuilder
 import com.wechantloup.side.dagger.modules.ApplicationModule
+import com.wechantloup.side.dagger.modules.InternetModule
 import com.wechantloup.side.modules.MyApplication
 import dagger.BindsInstance
 import dagger.Component
@@ -12,7 +13,7 @@ import dagger.android.support.DaggerApplication
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AndroidSupportInjectionModule::class, ApplicationModule::class, ActivityBuilder::class])
+@Component(modules = [AndroidSupportInjectionModule::class, ApplicationModule::class, InternetModule::class, ActivityBuilder::class])
 interface ApplicationComponent : AndroidInjector<DaggerApplication> {
 
     @Component.Builder

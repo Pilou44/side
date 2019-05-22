@@ -14,7 +14,13 @@ class GetToiletsUseCase
 
     override fun buildObservable(params: Void?): Observable<ArrayList<ToiletsBean>> {
         return mRepository.getToilets().flatMap {
+            mRepository.saveToilets(it.list)
             Observable.just(it.list)
+        }.onErrorReturn{
+            val list = mRepository.loadToilets()
+            val array = ArrayList<ToiletsBean>()
+            array.addAll(list)
+            array
         }
     }
 }

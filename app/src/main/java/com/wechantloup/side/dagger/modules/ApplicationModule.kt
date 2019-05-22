@@ -2,6 +2,8 @@ package com.wechantloup.side.dagger.modules
 
 import android.app.Application
 import android.content.Context
+import androidx.room.Room
+import com.wechantloup.side.data.content.DataBase
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Scheduler
@@ -21,5 +23,11 @@ class ApplicationModule(var application: Application) {
     @Singleton
     internal fun provideScheduler(): Scheduler {
         return AndroidSchedulers.mainThread()
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideDatabase(): DataBase {
+        return Room.databaseBuilder(application, DataBase::class.java, "my-database").build()
     }
 }

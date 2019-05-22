@@ -21,11 +21,13 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.wechantloup.side.R
+import com.wechantloup.side.domain.bean.ToiletsBean
 import com.wechantloup.side.modules.core.BaseActivity
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, LocationListener {
+class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, LocationListener,
+    GoogleMap.OnInfoWindowClickListener {
 
     companion object {
         private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2702
@@ -100,6 +102,7 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
         mMap!!.setInfoWindowAdapter(CustomInfoWindowAdapter(this))
+        mMap!!.setOnInfoWindowClickListener(this)
         if (mDataReady) {
             displayToilets()
         }
@@ -164,5 +167,14 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
         mMap?.clear()
         mPositionMarker = null
         mPresenter.retrieveToiletsList()
+    }
+
+    override fun onInfoWindowClick(marker: Marker) {
+        mPresenter.openToilet(marker.tag as ToiletsBean)
+    }
+
+    override fun notifyItemModified() {
+        mMap?.clear()
+        mMap?.let { displayToilets() }
     }
 }

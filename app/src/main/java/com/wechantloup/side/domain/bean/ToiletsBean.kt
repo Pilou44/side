@@ -1,9 +1,12 @@
 package com.wechantloup.side.domain.bean
 
+import android.os.Parcelable
 import androidx.room.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity(tableName = "toilets")
 data class ToiletsBean(
     @PrimaryKey
@@ -13,11 +16,19 @@ data class ToiletsBean(
 
     @Embedded
     @SerializedName("fields")
-    var fields: FieldsBean
-) {
+    var fields: FieldsBean,
+
     @Ignore
     var isFavorite: Boolean = false
+) : Parcelable {
 
+    constructor(): this("id", FieldsBean(), false)
+
+    override fun equals(other: Any?): Boolean {
+        return other is ToiletsBean && other.id == id
+    }
+
+    @Parcelize
     data class FieldsBean (
         @ColumnInfo(name = "arrondissement")
         @SerializedName("arrondissement")
@@ -42,7 +53,9 @@ data class ToiletsBean(
         @ColumnInfo(name = "geom_x_y")
         @SerializedName("geom_x_y")
         var location: ArrayList<Double>
-    )
+    ) : Parcelable {
+        constructor() : this(0, "", "", "", "", ArrayList())
+    }
 
     fun getPosition(): LatLng {
         return LatLng(fields.location[0], fields.location[1])
@@ -50,7 +63,9 @@ data class ToiletsBean(
 
     fun getAddress(): String {
         var address = ""
-        fields.number?.let { address += fields.number + ", " }
+        if (!fields.number.isNullOrEmpty()) {
+            address += fields.number + ", "
+        }
         address += fields.street
         return address
     }

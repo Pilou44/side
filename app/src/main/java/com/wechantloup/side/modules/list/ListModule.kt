@@ -16,8 +16,7 @@ class ListModule {
     internal fun provideListPresenter(getToiletsUseCase: GetToiletsUseCase,
                                       getFavoritesUseCase: GetFavoritesUseCase,
                                       addFavoriteUseCase: AddFavoriteUseCase,
-                                      removeFavoriteUseCase: RemoveFavoriteUseCase
-    ): ListContract.Presenter {
+                                      removeFavoriteUseCase: RemoveFavoriteUseCase): ListContract.Presenter {
         return ListPresenter(getToiletsUseCase, getFavoritesUseCase, addFavoriteUseCase, removeFavoriteUseCase)
     }
 }

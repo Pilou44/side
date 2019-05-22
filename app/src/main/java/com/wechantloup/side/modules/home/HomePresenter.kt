@@ -5,8 +5,12 @@ import com.wechantloup.side.domain.bean.FavoriteBean
 import com.wechantloup.side.domain.bean.ToiletsBean
 import com.wechantloup.side.domain.usecase.GetFavoritesUseCase
 import com.wechantloup.side.domain.usecase.GetToiletsUseCase
+import com.wechantloup.side.events.ModifyFavoriteEvent
+import com.wechantloup.side.modules.core.BaseContract
 import com.wechantloup.side.modules.core.BasePresenter
 import io.reactivex.observers.ResourceObserver
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 class HomePresenter(router: HomeContract.Router,
                     private val mGetToiletsUseCase: GetToiletsUseCase,
@@ -17,7 +21,28 @@ class HomePresenter(router: HomeContract.Router,
         private var TAG = HomePresenter::class.java.simpleName
     }
 
+    override fun subscribe(view: BaseContract.View) {
+        super.subscribe(view)
+        EventBus.getDefault().register(this)
+    }
+
+    override fun unsubscribe(view: BaseContract.View) {
+        super.unsubscribe(view)
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe
+    fun onModifyFavoriteEvent(event: ModifyFavoriteEvent) {
+        val index = mToilets!!.indexOf(event.toilet)
+        mToilets!![index].isFavorite = event.toilet.isFavorite
+        mView?.notifyItemModified()
+    }
+
     private var mToilets: ArrayList<ToiletsBean>? = null
+
+    override fun openToilet(toilet: ToiletsBean) {
+        mRouter?.openToilet(mView!!, toilet)
+    }
 
     override fun retrieveToiletsList() {
         mGetFavoritesUseCase.execute(GetFavoritesSubscriber())

@@ -35,6 +35,10 @@
                 android:name=".modules.list.ListActivity">
         </activity>
 
+        <activity
+                android:name=".modules.details.DetailsActivity">
+        </activity>
+
     </application>
 
 </manifest>

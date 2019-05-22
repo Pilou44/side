@@ -30,6 +30,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {
@@ -68,6 +71,9 @@ dependencies {
     // ROOM
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
+
+    // EVENT BUS
+    implementation 'org.greenrobot:eventbus:3.1.1'
 
     // TEST
     testImplementation 'junit:junit:4.12'

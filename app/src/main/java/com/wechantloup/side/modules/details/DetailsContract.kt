@@ -12,5 +12,10 @@ interface DetailsContract {
     interface Presenter: BaseContract.Presenter {
         fun setToilet(toilet: ToiletsBean)
         fun setFavorite(favorite: Boolean)
+        fun share()
+    }
+
+    interface Router: BaseContract.Router {
+        fun share(view: View, text: String)
     }
 }

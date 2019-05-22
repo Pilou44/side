@@ -59,6 +59,10 @@ class DetailsActivity: BaseActivity(), DetailsContract.View {
                 onBackPressed()
                 true
             }
+            R.id.share -> {
+                mPresenter.share()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

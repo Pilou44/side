@@ -11,8 +11,14 @@ class DetailsModule {
 
     @Provides
     @PerApplicationView
-    internal fun provideListPresenter(addFavoriteUseCase: AddFavoriteUseCase,
-                                      removeFavoriteUseCase: RemoveFavoriteUseCase): DetailsContract.Presenter {
-        return DetailsPresenter(addFavoriteUseCase, removeFavoriteUseCase)
+    internal fun provideDetailsPresenter(router: DetailsContract.Router, addFavoriteUseCase: AddFavoriteUseCase,
+                                         removeFavoriteUseCase: RemoveFavoriteUseCase): DetailsContract.Presenter {
+        return DetailsPresenter(router, addFavoriteUseCase, removeFavoriteUseCase)
+    }
+
+    @Provides
+    @PerApplicationView
+    internal fun provideDetailsRouter(): DetailsContract.Router {
+        return DetailsRouter()
     }
 }

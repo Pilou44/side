@@ -24,7 +24,7 @@ data class ToiletsBean(
         var street: String,
 
         @SerializedName("numero_de_voie")
-        var number: String,
+        var number: String?,
 
         @SerializedName("geom_x_y")
         var location: ArrayList<Double>
@@ -32,5 +32,20 @@ data class ToiletsBean(
 
     fun getPosition(): LatLng {
         return LatLng(fields.location[0], fields.location[1])
+    }
+
+    fun getAddress(): String {
+        var address = ""
+        fields.number?.let { address += fields.number + ", " }
+        address += fields.street
+        return address
+    }
+
+    fun getAdministrator(): String {
+        return fields.administrator
+    }
+
+    fun getOpening(): String {
+        return fields.openingTime
     }
 }

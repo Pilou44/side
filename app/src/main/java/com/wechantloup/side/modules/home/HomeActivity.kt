@@ -96,6 +96,7 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
 
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
+        mMap!!.setInfoWindowAdapter(CustomInfoWindowAdapter(this))
         if (mDataReady) {
             displayToilets()
         }
@@ -104,7 +105,7 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
     override fun onLocationChanged(location: Location) {
         val position = LatLng(location.latitude, location.longitude)
         if (mPositionMarker == null) {
-            mPositionMarker = mMap?.addMarker(MarkerOptions().position(position).title("je suis la").icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
+            mPositionMarker = mMap?.addMarker(MarkerOptions().position(position).icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
             mMap?.moveCamera(CameraUpdateFactory.newLatLng(position))
         } else {
             mPositionMarker?.position = position
@@ -131,7 +132,8 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
     private fun displayToilets() {
         val toilets = mPresenter.getToiletsList()
         for (toilet in toilets!!) {
-            mMap!!.addMarker(MarkerOptions().position(toilet.getPosition()))//.title("je suis la").icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
+            val marker = mMap!!.addMarker(MarkerOptions().position(toilet.getPosition()))//.title("je suis la").icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
+            marker.tag = toilet
         }
     }
 }

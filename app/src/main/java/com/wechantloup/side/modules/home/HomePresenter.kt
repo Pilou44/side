@@ -18,14 +18,18 @@ class HomePresenter(router: HomeContract.Router, private val mGetToiletsUseCase:
         private var TAG = HomePresenter::class.java.simpleName
     }
 
+    override fun getToiletsList(): ArrayList<ToiletsBean>? {
+        return mToilets
+    }
+
     inner class GetToiletsSubscriber : ResourceObserver<ArrayList<ToiletsBean>>() {
         override fun onComplete() {
-            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            // Nothing to do
         }
 
         override fun onNext(toilets: ArrayList<ToiletsBean>) {
             mToilets = toilets
-            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            mView?.notifyToiletsListRetrieved()
         }
 
         override fun onError(e: Throwable) {

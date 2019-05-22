@@ -36,6 +36,7 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
     private var mMap: GoogleMap? = null
     private var mLocationManager: LocationManager? = null
     private var mPositionMarker: Marker? = null
+    private var mDataReady = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,15 +96,18 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
 
     override fun onMapReady(map: GoogleMap?) {
         mMap = map
+        if (mDataReady) {
+            displayToilets()
+        }
     }
 
     override fun onLocationChanged(location: Location) {
+        val position = LatLng(location.latitude, location.longitude)
         if (mPositionMarker == null) {
-            val position = LatLng(location.latitude, location.longitude)
             mPositionMarker = mMap?.addMarker(MarkerOptions().position(position).title("je suis la").icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
             mMap?.moveCamera(CameraUpdateFactory.newLatLng(position))
         } else {
-            mPositionMarker?.position = LatLng(location.latitude, location.longitude)
+            mPositionMarker?.position = position
         }
     }
 
@@ -117,5 +121,17 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
 
     override fun onProviderDisabled(provider: String?) {
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun notifyToiletsListRetrieved() {
+        mDataReady = true
+        mMap?.let { displayToilets() }
+    }
+
+    private fun displayToilets() {
+        val toilets = mPresenter.getToiletsList()
+        for (toilet in toilets!!) {
+            mMap!!.addMarker(MarkerOptions().position(toilet.getPosition()))//.title("je suis la").icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
+        }
     }
 }

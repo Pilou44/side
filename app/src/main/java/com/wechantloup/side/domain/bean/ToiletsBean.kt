@@ -1,5 +1,6 @@
 package com.wechantloup.side.domain.bean
 
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.annotations.SerializedName
 
 data class ToiletsBean(
@@ -9,7 +10,6 @@ data class ToiletsBean(
     @SerializedName("fields")
     var fields: FieldsBean
 ) {
-
     data class FieldsBean (
         @SerializedName("arrondissement")
         var borough: Int,
@@ -30,4 +30,7 @@ data class ToiletsBean(
         var location: ArrayList<Double>
     )
 
+    fun getPosition(): LatLng {
+        return LatLng(fields.location[0], fields.location[1])
+    }
 }

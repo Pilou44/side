@@ -1,6 +1,7 @@
 package com.wechantloup.side.modules.home
 
 import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 import com.wechantloup.side.domain.bean.FavoriteBean
 import com.wechantloup.side.domain.bean.ToiletsBean
 import com.wechantloup.side.domain.usecase.GetFavoritesUseCase
@@ -68,12 +69,12 @@ class HomePresenter(router: HomeContract.Router,
         return mToilets
     }
 
-    override fun showAsList() {
-        mRouter?.goToList(mView!!, false)
+    override fun showAsList(position: LatLng?) {
+        mRouter?.goToList(mView!!, false, position)
     }
 
-    override fun showFavorites() {
-        mRouter?.goToList(mView!!, true)
+    override fun showFavorites(position: LatLng?) {
+        mRouter?.goToList(mView!!, true, position)
     }
 
     inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<ArrayList<ToiletsBean>>() {

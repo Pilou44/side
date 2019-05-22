@@ -1,8 +1,12 @@
 package com.wechantloup.side.modules.list
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.maps.model.LatLng
+import com.wechantloup.side.R
 import com.wechantloup.side.modules.core.BaseActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_list.*
@@ -12,6 +16,7 @@ class ListActivity: BaseActivity(), ListContract.View {
 
     companion object {
         const val EXTRA_FAVORITES = "favorites"
+        const val EXTRA_POSITION = "position"
     }
 
     @Inject
@@ -28,7 +33,8 @@ class ListActivity: BaseActivity(), ListContract.View {
         mPresenter.subscribe(this)
 
         val favorites = intent.getBooleanExtra(EXTRA_FAVORITES, false)
-        mPresenter.retrieveToiletsList(favorites)
+        val myPosition = intent.getParcelableExtra<LatLng?>(EXTRA_POSITION)
+        mPresenter.retrieveToiletsList(favorites, myPosition)
 
         mAdapter = ListAdapter(mPresenter)
         rv.setHasFixedSize(true)
@@ -48,10 +54,20 @@ class ListActivity: BaseActivity(), ListContract.View {
         mAdapter.notifyDataSetChanged()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.list_menu, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
+                true
+            }
+            R.id.sort_by_distance -> {
+                mPresenter.sortByDistance()
                 true
             }
             else -> super.onOptionsItemSelected(item)

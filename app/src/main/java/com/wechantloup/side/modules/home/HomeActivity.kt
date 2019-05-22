@@ -156,11 +156,19 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
                 true
             }
             R.id.list -> {
-                mPresenter.showAsList()
+                val position = when (mPositionMarker) {
+                    null -> null
+                    else -> mPositionMarker!!.position
+                }
+                mPresenter.showAsList(position)
                 true
             }
             R.id.favorites -> {
-                mPresenter.showFavorites()
+                val position = when (mPositionMarker) {
+                    null -> null
+                    else -> mPositionMarker!!.position
+                }
+                mPresenter.showFavorites(position)
                 true
             }
             else -> super.onOptionsItemSelected(item)

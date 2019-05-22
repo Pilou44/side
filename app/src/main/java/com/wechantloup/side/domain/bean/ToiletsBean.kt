@@ -19,10 +19,13 @@ data class ToiletsBean(
     var fields: FieldsBean,
 
     @Ignore
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
+
+    @Ignore
+    var distanceToMe: Double = Double.NEGATIVE_INFINITY
 ) : Parcelable {
 
-    constructor(): this("id", FieldsBean(), false)
+    constructor(): this("id", FieldsBean(), false, Double.NEGATIVE_INFINITY)
 
     override fun equals(other: Any?): Boolean {
         return other is ToiletsBean && other.id == id

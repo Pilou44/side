@@ -1,6 +1,8 @@
 package com.wechantloup.side.modules.list
 
+import android.os.Build
 import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 import com.wechantloup.side.domain.bean.FavoriteBean
 import com.wechantloup.side.domain.bean.ToiletsBean
 import com.wechantloup.side.domain.usecase.AddFavoriteUseCase
@@ -9,13 +11,14 @@ import com.wechantloup.side.domain.usecase.GetToiletsUseCase
 import com.wechantloup.side.domain.usecase.RemoveFavoriteUseCase
 import com.wechantloup.side.modules.core.BaseContract
 import com.wechantloup.side.modules.core.BasePresenter
+import com.wechantloup.side.utils.calculateDistance
 import io.reactivex.observers.ResourceObserver
+import java.util.*
 
 class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
                     private val mGetFavoritesUseCase: GetFavoritesUseCase,
                     private val mAddFavoriteUseCase: AddFavoriteUseCase,
-                    private val mRemoveFavoriteUseCase: RemoveFavoriteUseCase
-):
+                    private val mRemoveFavoriteUseCase: RemoveFavoriteUseCase):
     BasePresenter<BaseContract.Router, ListContract.View>(null), ListContract.Presenter {
 
     companion object {
@@ -23,8 +26,10 @@ class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
     }
 
     private var mToilets: ArrayList<ToiletsBean>? = null
+    private var mMyPosition: LatLng? = null
 
-    override fun retrieveToiletsList(favorites: Boolean) {
+    override fun retrieveToiletsList(favorites: Boolean, myPosition: LatLng?) {
+        mMyPosition = myPosition
         mGetFavoritesUseCase.execute(GetFavoritesSubscriber(favorites))
     }
 
@@ -50,6 +55,29 @@ class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
             true -> mAddFavoriteUseCase.execute(FavoriteSubscriber(toilet), FavoriteBean(toilet.id))
             false -> mRemoveFavoriteUseCase.execute(FavoriteSubscriber(toilet), FavoriteBean(toilet.id))
         }
+    }
+
+    override fun sortByDistance() {
+        mMyPosition?.let {
+            for (toilet in mToilets!!) {
+                toilet.distanceToMe = calculateDistance(mMyPosition!!, toilet.getPosition())
+            }
+
+            val comparator = Comparator<ToiletsBean> { a, b ->
+                when {
+                    a.distanceToMe < b.distanceToMe -> -1
+                    a.distanceToMe > b.distanceToMe -> 1
+                    else -> 0
+                }
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                mToilets!!.sortWith(comparator)
+            } else {
+                Collections.sort(mToilets, comparator)
+            }
+        }
+        mView?.notifyToiletsListRetrieved()
     }
 
     inner class FavoriteSubscriber(private var toilet: ToiletsBean) : ResourceObserver<Void>() {

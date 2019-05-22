@@ -10,7 +10,7 @@ interface ListContract {
     }
 
     interface Presenter: BaseContract.Presenter {
-        fun retrieveToiletsList()
+        fun retrieveToiletsList(favorites: Boolean)
         fun getToiletsList(): ArrayList<ToiletsBean>?
         fun setFavorite(toilet: ToiletsBean, favorite: Boolean)
     }

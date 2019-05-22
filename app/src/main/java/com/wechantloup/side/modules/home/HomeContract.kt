@@ -15,10 +15,11 @@ interface HomeContract {
         fun getToiletsList(): ArrayList<ToiletsBean>?
         fun showAsList()
         fun openToilet(toilet: ToiletsBean)
+        fun showFavorites()
     }
 
     interface Router: BaseContract.Router {
-        fun goToList(view: View)
+        fun goToList(view: View, favorites: Boolean)
         fun openToilet(view: View, toilet: ToiletsBean)
     }
 }

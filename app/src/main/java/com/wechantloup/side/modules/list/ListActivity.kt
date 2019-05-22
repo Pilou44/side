@@ -10,6 +10,10 @@ import javax.inject.Inject
 
 class ListActivity: BaseActivity(), ListContract.View {
 
+    companion object {
+        const val EXTRA_FAVORITES = "favorites"
+    }
+
     @Inject
     internal lateinit var mPresenter: ListContract.Presenter
 
@@ -23,7 +27,8 @@ class ListActivity: BaseActivity(), ListContract.View {
 
         mPresenter.subscribe(this)
 
-        mPresenter.retrieveToiletsList()
+        val favorites = intent.getBooleanExtra(EXTRA_FAVORITES, false)
+        mPresenter.retrieveToiletsList(favorites)
 
         mAdapter = ListAdapter(mPresenter)
         rv.setHasFixedSize(true)

@@ -8,4 +8,8 @@
           android:title="@string/show_list_button"
           android:icon="@drawable/ic_list_white_24dp"
           app:showAsAction="always"/>
+    <item android:id="@+id/favorites"
+          android:title="@string/favorites"
+          android:icon="@drawable/ic_star_white_24dp"
+          app:showAsAction="always"/>
 </menu>

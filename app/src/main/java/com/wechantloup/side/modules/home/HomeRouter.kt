@@ -14,8 +14,9 @@ class HomeRouter: BaseRouter(), HomeContract.Router {
         getActivity(view)?.startActivity(intent)
     }
 
-    override fun goToList(view: HomeContract.View) {
+    override fun goToList(view: HomeContract.View, favorites: Boolean) {
         val intent = Intent(getActivity(view), ListActivity::class.java)
+        intent.putExtra(ListActivity.EXTRA_FAVORITES, favorites)
         getActivity(view)?.startActivity(intent)
         //getActivity(view)?.overridePendingTransition(R.anim.animation_enter_left, R.anim.animation_leave_right)
     }

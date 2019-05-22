@@ -69,7 +69,11 @@ class HomePresenter(router: HomeContract.Router,
     }
 
     override fun showAsList() {
-        mRouter?.goToList(mView!!)
+        mRouter?.goToList(mView!!, false)
+    }
+
+    override fun showFavorites() {
+        mRouter?.goToList(mView!!, true)
     }
 
     inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<ArrayList<ToiletsBean>>() {

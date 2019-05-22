@@ -24,17 +24,24 @@ class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
 
     private var mToilets: ArrayList<ToiletsBean>? = null
 
-    override fun retrieveToiletsList() {
-        mGetFavoritesUseCase.execute(GetFavoritesSubscriber())
+    override fun retrieveToiletsList(favorites: Boolean) {
+        mGetFavoritesUseCase.execute(GetFavoritesSubscriber(favorites))
     }
 
     override fun getToiletsList(): ArrayList<ToiletsBean>? {
         return mToilets
     }
 
-    private fun checkFavorites(toilets: ArrayList<ToiletsBean>, favorites: List<FavoriteBean>) {
+    private fun checkFavorites(toilets: ArrayList<ToiletsBean>, favorites: List<FavoriteBean>, showFavoritesOnly: Boolean) {
+        val favoritesList = ArrayList<ToiletsBean>()
         for (toilet in toilets) {
             toilet.isFavorite = favorites.contains(FavoriteBean(toilet.id))
+            if (showFavoritesOnly && toilet.isFavorite) {
+                favoritesList.add(toilet)
+            }
+        }
+        if (showFavoritesOnly) {
+            mToilets = favoritesList
         }
     }
 
@@ -60,7 +67,8 @@ class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
 
     }
 
-    inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<ArrayList<ToiletsBean>>() {
+    inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?,
+                                     private val showFavoritesOnly: Boolean) : ResourceObserver<ArrayList<ToiletsBean>>() {
         override fun onComplete() {
             // Nothing to do
         }
@@ -68,7 +76,7 @@ class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
         override fun onNext(toilets: ArrayList<ToiletsBean>) {
             mToilets = toilets
             favorites?.let {
-                checkFavorites(mToilets!!, favorites)
+                checkFavorites(mToilets!!, favorites, showFavoritesOnly)
             }
             mView?.notifyToiletsListRetrieved()
         }
@@ -79,18 +87,18 @@ class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
         }
     }
 
-    inner class GetFavoritesSubscriber : ResourceObserver<List<FavoriteBean>>() {
+    inner class GetFavoritesSubscriber(private var showFavoritesOnly: Boolean) : ResourceObserver<List<FavoriteBean>>() {
         override fun onComplete() {
             // Nothing to do
         }
 
         override fun onNext(favorites: List<FavoriteBean>) {
-            mGetToiletsUseCase.execute(GetToiletsSubscriber(favorites))
+            mGetToiletsUseCase.execute(GetToiletsSubscriber(favorites, showFavoritesOnly))
         }
 
         override fun onError(e: Throwable) {
             //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            mGetToiletsUseCase.execute(GetToiletsSubscriber(null))
+            mGetToiletsUseCase.execute(GetToiletsSubscriber(null, showFavoritesOnly))
         }
 
     }

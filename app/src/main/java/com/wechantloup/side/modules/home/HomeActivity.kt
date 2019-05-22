@@ -159,6 +159,10 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
                 mPresenter.showAsList()
                 true
             }
+            R.id.favorites -> {
+                mPresenter.showFavorites()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

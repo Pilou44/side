@@ -7,6 +7,9 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -135,5 +138,27 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
             val marker = mMap!!.addMarker(MarkerOptions().position(toilet.getPosition()))//.title("je suis la").icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
             marker.tag = toilet
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.home_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.refresh -> {
+                refresh()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun refresh() {
+        mMap?.clear()
+        mPositionMarker = null
+        mPresenter.retrieveToiletsList()
     }
 }

@@ -15,6 +15,9 @@ data class ToiletsBean(
     @SerializedName("fields")
     var fields: FieldsBean
 ) {
+    @Ignore
+    var isFavorite: Boolean = false
+
     data class FieldsBean (
         @ColumnInfo(name = "arrondissement")
         @SerializedName("arrondissement")

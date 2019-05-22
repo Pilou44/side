@@ -22,10 +22,12 @@ class CustomInfoWindowAdapter(private var context: Context): GoogleMap.InfoWindo
                 val addressTv = view.address
                 val administratorTv = view.administrator
                 val openingTv = view.opening_time
+                val favorite = view.favorite
 
                 addressTv.text = info.getAddress()
                 administratorTv.text = info.getAdministrator()
                 openingTv.text = info.getOpening()
+                favorite.isChecked = info.isFavorite
 
                 view
             }

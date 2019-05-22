@@ -1,13 +1,16 @@
 package com.wechantloup.side.data.content
 
 import androidx.room.*
+import com.wechantloup.side.domain.bean.FavoriteBean
 import com.wechantloup.side.domain.bean.ToiletsBean
+import io.reactivex.Observable
 
-@Database(entities = [ToiletsBean::class], version = 1, exportSchema = false)
+@Database(entities = [ToiletsBean::class, FavoriteBean::class], version = 1, exportSchema = false)
 @TypeConverters(DataBase.LocationConverter::class)
 abstract class DataBase : RoomDatabase() {
 
     abstract fun toiletsDao(): ToiletsDao
+    abstract fun favoritesDao(): FavoriteDao
 
     @Dao
     interface ToiletsDao {
@@ -20,6 +23,20 @@ abstract class DataBase : RoomDatabase() {
 
         @Query("DELETE FROM toilets")
         fun deleteAll(): Int
+
+    }
+
+    @Dao
+    interface FavoriteDao {
+
+        @Query("SELECT * FROM favorites")
+        fun getAll(): List<FavoriteBean>
+
+        @Insert
+        fun insert(resource: FavoriteBean)
+
+        @Delete
+        fun delete(resource: FavoriteBean)
 
     }
 

@@ -1,6 +1,7 @@
 package com.wechantloup.side.modules.home
 
 import com.wechantloup.side.dagger.scope.PerApplicationView
+import com.wechantloup.side.domain.usecase.GetFavoritesUseCase
 import com.wechantloup.side.domain.usecase.GetToiletsUseCase
 import dagger.Module
 import dagger.Provides
@@ -10,8 +11,11 @@ class HomeModule {
 
     @Provides
     @PerApplicationView
-    internal fun provideHomePresenter(router: HomeContract.Router, getToiletsUseCase: GetToiletsUseCase): HomeContract.Presenter {
-        return HomePresenter(router, getToiletsUseCase)
+    internal fun provideHomePresenter(router: HomeContract.Router,
+                                      getToiletsUseCase: GetToiletsUseCase,
+                                      getFavoritesUseCase: GetFavoritesUseCase):
+            HomeContract.Presenter {
+        return HomePresenter(router, getToiletsUseCase, getFavoritesUseCase)
     }
 
     @Provides

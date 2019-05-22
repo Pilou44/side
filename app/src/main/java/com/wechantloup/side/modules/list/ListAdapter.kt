@@ -26,6 +26,8 @@ class ListAdapter(private val mPresenter: ListContract.Presenter): RecyclerView.
         holder.itemView.address.text = toilets.getAddress()
         holder.itemView.administrator.text = toilets.getAdministrator()
         holder.itemView.opening_time.text = toilets.getOpening()
+        holder.itemView.favorite.isChecked = toilets.isFavorite
+        holder.itemView.favorite.setOnCheckedChangeListener { _, isChecked -> mPresenter.setFavorite(toilets, isChecked)}
     }
 
     inner class ToiletsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)

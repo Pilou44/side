@@ -7,19 +7,16 @@ import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ToiletsRepository
 
 @Inject
 constructor(retrofit: Retrofit, dataBase: DataBase) {
 
-    private var mService: ToiletsService
-    private var mToiletsDao: DataBase.ToiletsDao
-
-    init {
-        mService = retrofit.create(ToiletsService::class.java)
-        mToiletsDao = dataBase.toiletsDao()
-    }
+    private var mService: ToiletsService = retrofit.create(ToiletsService::class.java)
+    private var mToiletsDao: DataBase.ToiletsDao = dataBase.toiletsDao()
 
     fun getToilets(): Observable<ToiletsListBean> {
         return mService.getToilets()

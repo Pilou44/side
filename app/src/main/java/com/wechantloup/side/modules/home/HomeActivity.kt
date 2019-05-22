@@ -18,6 +18,8 @@ class HomeActivity: BaseActivity(), HomeContract.View {
         AndroidInjection.inject(this)
 
         mPresenter.subscribe(this)
+
+        mPresenter.retrieveToiletsList()
     }
 
     override fun onDestroy() {

@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Singleton
 
 @Module
@@ -13,5 +15,11 @@ class ApplicationModule(var application: Application) {
     @Singleton
     internal fun provideApplicationContext(): Context {
         return application
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideScheduler(): Scheduler {
+        return AndroidSchedulers.mainThread()
     }
 }

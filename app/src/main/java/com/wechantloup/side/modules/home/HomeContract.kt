@@ -9,7 +9,7 @@ interface HomeContract {
     }
 
     interface Presenter: BaseContract.Presenter {
-
+        fun retrieveToiletsList()
     }
 
     interface Router: BaseContract.Router {

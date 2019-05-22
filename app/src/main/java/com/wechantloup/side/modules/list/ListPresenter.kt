@@ -1,15 +1,16 @@
-package com.wechantloup.side.modules.home
+package com.wechantloup.side.modules.list
 
 import android.util.Log
 import com.wechantloup.side.domain.bean.ToiletsBean
 import com.wechantloup.side.domain.usecase.GetToiletsUseCase
+import com.wechantloup.side.modules.core.BaseContract
 import com.wechantloup.side.modules.core.BasePresenter
 import io.reactivex.observers.ResourceObserver
 
-class HomePresenter(router: HomeContract.Router, private val mGetToiletsUseCase: GetToiletsUseCase): BasePresenter<HomeContract.Router, HomeContract.View>(router), HomeContract.Presenter {
+class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase): BasePresenter<BaseContract.Router, ListContract.View>(null), ListContract.Presenter {
 
     companion object {
-        private var TAG = HomePresenter::class.java.simpleName
+        private var TAG = ListPresenter::class.java.simpleName
     }
 
     private var mToilets: ArrayList<ToiletsBean>? = null
@@ -20,10 +21,6 @@ class HomePresenter(router: HomeContract.Router, private val mGetToiletsUseCase:
 
     override fun getToiletsList(): ArrayList<ToiletsBean>? {
         return mToilets
-    }
-
-    override fun showAsList() {
-        mRouter?.goToList(mView!!)
     }
 
     inner class GetToiletsSubscriber : ResourceObserver<ArrayList<ToiletsBean>>() {

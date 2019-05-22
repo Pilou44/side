@@ -1,6 +1,6 @@
 package com.wechantloup.side.modules.core
 
-abstract class BasePresenter<R: BaseContract.Router, V: BaseContract.View>(protected val mRouter: R): BaseContract.Presenter {
+abstract class BasePresenter<R: BaseContract.Router, V: BaseContract.View>(protected val mRouter: R?): BaseContract.Presenter {
 
     protected var mView: V? = null
 

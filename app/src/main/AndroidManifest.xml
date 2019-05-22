@@ -31,6 +31,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+                android:name=".modules.list.ListActivity">
+        </activity>
+
     </application>
 
 </manifest>

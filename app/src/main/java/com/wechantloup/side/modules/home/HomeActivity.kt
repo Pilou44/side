@@ -152,6 +152,10 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
                 refresh()
                 true
             }
+            R.id.list -> {
+                mPresenter.showAsList()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

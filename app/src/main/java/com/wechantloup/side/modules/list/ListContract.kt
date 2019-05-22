@@ -1,9 +1,9 @@
-package com.wechantloup.side.modules.home
+package com.wechantloup.side.modules.list
 
 import com.wechantloup.side.domain.bean.ToiletsBean
 import com.wechantloup.side.modules.core.BaseContract
 
-interface HomeContract {
+interface ListContract {
 
     interface View: BaseContract.View {
         fun notifyToiletsListRetrieved()
@@ -12,10 +12,5 @@ interface HomeContract {
     interface Presenter: BaseContract.Presenter {
         fun retrieveToiletsList()
         fun getToiletsList(): ArrayList<ToiletsBean>?
-        fun showAsList()
-    }
-
-    interface Router: BaseContract.Router {
-        fun goToList(view: View)
     }
 }

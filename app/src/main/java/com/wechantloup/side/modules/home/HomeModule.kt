@@ -5,7 +5,6 @@ import com.wechantloup.side.domain.usecase.GetToiletsUseCase
 import dagger.Module
 import dagger.Provides
 
-
 @Module
 class HomeModule {
 

@@ -1,6 +1,7 @@
 package com.wechantloup.side.modules.list
 
 import android.content.Intent
+import com.wechantloup.side.R
 import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.modules.core.BaseRouter
 import com.wechantloup.side.modules.details.DetailsActivity
@@ -11,5 +12,6 @@ class ListRouter: BaseRouter(), ListContract.Router {
         val intent = Intent(getActivity(view), DetailsActivity::class.java)
         intent.putExtra(DetailsActivity.EXTRA_TOILET, toilet)
         getActivity(view)?.startActivity(intent)
+        getActivity(view)?.overridePendingTransition(R.anim.animation_enter_bottom, R.anim.no_animation)
     }
 }

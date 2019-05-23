@@ -64,4 +64,9 @@ class DetailsActivity: BaseActivity<DetailsContract.Presenter>(), DetailsContrac
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.no_animation, R.anim.animation_leave_bottom)
+    }
 }

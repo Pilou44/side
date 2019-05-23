@@ -2,6 +2,7 @@ package com.wechantloup.side.modules.home
 
 import android.content.Intent
 import com.google.android.gms.maps.model.LatLng
+import com.wechantloup.side.R
 import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.modules.core.BaseRouter
 import com.wechantloup.side.modules.details.DetailsActivity
@@ -13,6 +14,7 @@ class HomeRouter: BaseRouter(), HomeContract.Router {
         val intent = Intent(getActivity(view), DetailsActivity::class.java)
         intent.putExtra(DetailsActivity.EXTRA_TOILET, toilet)
         getActivity(view)?.startActivity(intent)
+        getActivity(view)?.overridePendingTransition(R.anim.animation_enter_bottom, R.anim.no_animation)
     }
 
     override fun goToList(view: HomeContract.View, favorites: Boolean, position: LatLng?) {
@@ -20,6 +22,6 @@ class HomeRouter: BaseRouter(), HomeContract.Router {
         intent.putExtra(ListActivity.EXTRA_FAVORITES, favorites)
         intent.putExtra(ListActivity.EXTRA_POSITION, position)
         getActivity(view)?.startActivity(intent)
-        //getActivity(view)?.overridePendingTransition(R.anim.animation_enter_left, R.anim.animation_leave_right)
+        getActivity(view)?.overridePendingTransition(R.anim.animation_enter_right, R.anim.no_animation)
     }
 }

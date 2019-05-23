@@ -62,10 +62,6 @@ class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
 
     override fun sortByDistance() {
         mMyPosition?.let {
-            for (toilet in mToilets!!) {
-                toilet.distanceToMe = calculateDistance(mMyPosition!!, toilet.getPosition())
-            }
-
             val comparator = Comparator<ToiletsBean> { a, b ->
                 when {
                     a.distanceToMe < b.distanceToMe -> -1
@@ -142,6 +138,12 @@ class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
             mToilets = toilets
             favorites?.let {
                 checkFavorites(mToilets!!, favorites, showFavoritesOnly)
+            }
+
+            mMyPosition?.let {
+                for (toilet in mToilets!!) {
+                    toilet.distanceToMe = calculateDistance(mMyPosition!!, toilet.getPosition())
+                }
             }
             mView?.notifyToiletsListRetrieved()
         }

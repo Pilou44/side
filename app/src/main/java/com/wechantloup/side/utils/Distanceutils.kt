@@ -1,11 +1,9 @@
 package com.wechantloup.side.utils
 
-import android.util.Log
 import com.google.android.gms.maps.model.LatLng
-import java.text.DecimalFormat
 
 fun calculateDistance(StartP: LatLng, EndP: LatLng): Double {
-    val Radius = 6371// radius of earth in Km
+    val radius = 6371000// radius of earth in m
     val lat1 = StartP.latitude
     val lat2 = EndP.latitude
     val lon1 = StartP.longitude
@@ -16,16 +14,6 @@ fun calculateDistance(StartP: LatLng, EndP: LatLng): Double {
             * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
             * Math.sin(dLon / 2))
     val c = 2 * Math.asin(Math.sqrt(a))
-    val valueResult = Radius * c
-    val km = valueResult / 1
-    val newFormat = DecimalFormat("####")
-    val kmInDec = Integer.valueOf(newFormat.format(km))
-    val meter = valueResult % 1000
-    val meterInDec = Integer.valueOf(newFormat.format(meter))
-    Log.i(
-        "Radius Value", "" + valueResult + "   KM  " + kmInDec
-                + " Meter   " + meterInDec
-    )
 
-    return Radius * c
+    return radius * c
 }

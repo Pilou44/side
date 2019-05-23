@@ -28,6 +28,14 @@ class ListAdapter(private val mPresenter: ListContract.Presenter): RecyclerView.
         holder.itemView.opening_time.text = toilets.getOpening()
         holder.itemView.favorite.isChecked = toilets.isFavorite
         holder.itemView.favorite.setOnCheckedChangeListener { _, isChecked -> mPresenter.setFavorite(toilets, isChecked)}
+
+        if (toilets.distanceToMe >= 0) {
+            holder.itemView.distance.visibility = View.VISIBLE
+            val distance = holder.itemView.context.getString(R.string.distance, toilets.distanceToMe.toInt())
+            holder.itemView.distance.text = distance
+        } else {
+            holder.itemView.distance.visibility = View.GONE
+        }
     }
 
     inner class ToiletsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)

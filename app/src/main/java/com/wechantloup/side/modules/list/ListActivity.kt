@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import com.wechantloup.side.R
@@ -40,6 +41,7 @@ class ListActivity: BaseActivity(), ListContract.View {
         rv.setHasFixedSize(true)
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = mAdapter
+        rv.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)

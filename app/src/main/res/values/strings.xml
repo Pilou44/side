@@ -8,4 +8,5 @@
     <string name="sort_by_distance">Sort by distance</string>
     <string name="sort_button">Sort...</string>
     <string name="opens_first">Opens first</string>
+    <string name="distance">At %d m</string>
 </resources>

@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            style="?android:attr/starStyle"/>
+            android:button="@drawable/ic_star_checkbox_24dp"/>
 
     <TextView
             android:id="@+id/administrator"

@@ -58,6 +58,14 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
         mapFragment!!.getMapAsync(this)
 
         mLocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+            )
+        }
     }
 
     override fun onDestroy() {
@@ -67,14 +75,7 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
 
     override fun onResume() {
         super.onResume()
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
-            )
-        } else {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mLocationManager?.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME,
                 LOCATION_REFRESH_DISTANCE, this)
@@ -83,7 +84,9 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
 
     override fun onPause() {
         super.onPause()
-        mLocationManager?.removeUpdates(this)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mLocationManager?.removeUpdates(this)
+        }
     }
 
     @SuppressLint("MissingPermission")

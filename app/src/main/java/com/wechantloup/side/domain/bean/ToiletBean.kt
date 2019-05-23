@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity(tableName = "toilets")
-data class ToiletsBean(
+data class ToiletBean(
     @PrimaryKey
     @ColumnInfo(name = "id")
     @SerializedName("recordid")
@@ -28,7 +28,7 @@ data class ToiletsBean(
     constructor(): this("id", FieldsBean(), false, Double.NEGATIVE_INFINITY)
 
     override fun equals(other: Any?): Boolean {
-        return other is ToiletsBean && other.id == id
+        return other is ToiletBean && other.id == id
     }
 
     @Parcelize

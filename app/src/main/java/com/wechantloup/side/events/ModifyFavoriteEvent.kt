@@ -1,5 +1,5 @@
 package com.wechantloup.side.events
 
-import com.wechantloup.side.domain.bean.ToiletsBean
+import com.wechantloup.side.domain.bean.ToiletBean
 
-class ModifyFavoriteEvent(val toilet: ToiletsBean)
+class ModifyFavoriteEvent(val toilet: ToiletBean)

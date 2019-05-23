@@ -6,7 +6,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import com.wechantloup.side.R
-import com.wechantloup.side.domain.bean.ToiletsBean
+import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.modules.core.BaseActivity
 import kotlinx.android.synthetic.main.activity_details.*
 
@@ -20,7 +20,7 @@ class DetailsActivity: BaseActivity<DetailsContract.Presenter>(), DetailsContrac
         super.onCreate(savedInstanceState)
         setContentView(com.wechantloup.side.R.layout.activity_details)
 
-        val toilet = intent.getParcelableExtra<ToiletsBean>(EXTRA_TOILET)
+        val toilet = intent.getParcelableExtra<ToiletBean>(EXTRA_TOILET)
         mPresenter.setToilet(toilet)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -41,7 +41,7 @@ class DetailsActivity: BaseActivity<DetailsContract.Presenter>(), DetailsContrac
         favorite.setOnCheckedChangeListener { _, isChecked -> mPresenter.setFavorite(isChecked)}
     }
 
-    override fun notifyErrorModifyingFavorite(toilet: ToiletsBean) {
+    override fun notifyErrorModifyingFavorite(toilet: ToiletBean) {
         favorite.isChecked = toilet.isFavorite
     }
 

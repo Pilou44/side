@@ -2,7 +2,7 @@ package com.wechantloup.side.modules.list
 
 import com.google.android.gms.maps.model.LatLng
 import com.nhaarman.mockitokotlin2.any
-import com.wechantloup.side.domain.bean.ToiletsBean
+import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.domain.usecase.AddFavoriteUseCase
 import com.wechantloup.side.domain.usecase.GetFavoritesUseCase
 import com.wechantloup.side.domain.usecase.GetToiletsUseCase
@@ -86,7 +86,7 @@ class CompanyReviewPresenterUTest {
     @Test
     fun addFavorite_success() {
         // Given
-        val toilet = ToiletsBean()
+        val toilet = ToiletBean()
         doAnswer { invocation ->
             val subscriber = invocation.arguments[0] as ListPresenter.FavoriteSubscriber
             subscriber.onComplete()
@@ -103,7 +103,7 @@ class CompanyReviewPresenterUTest {
     @Test
     fun removeFavorite_success() {
         // Given
-        val toilet = ToiletsBean()
+        val toilet = ToiletBean()
         toilet.isFavorite = true
         doAnswer { invocation ->
             val subscriber = invocation.arguments[0] as ListPresenter.FavoriteSubscriber

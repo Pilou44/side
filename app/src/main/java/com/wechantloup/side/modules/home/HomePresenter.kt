@@ -3,7 +3,7 @@ package com.wechantloup.side.modules.home
 import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import com.wechantloup.side.domain.bean.FavoriteBean
-import com.wechantloup.side.domain.bean.ToiletsBean
+import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.domain.usecase.GetFavoritesUseCase
 import com.wechantloup.side.domain.usecase.GetToiletsUseCase
 import com.wechantloup.side.events.ModifyFavoriteEvent
@@ -24,7 +24,7 @@ class HomePresenter(router: HomeContract.Router,
     }
 
     @State @JvmField
-    var mToilets: ArrayList<ToiletsBean>? = null
+    var mToilets: ArrayList<ToiletBean>? = null
 
     override fun subscribe(view: BaseContract.View) {
         super.subscribe(view)
@@ -43,7 +43,7 @@ class HomePresenter(router: HomeContract.Router,
         mView?.notifyItemModified()
     }
 
-    override fun openToilet(toilet: ToiletsBean) {
+    override fun openToilet(toilet: ToiletBean) {
         mRouter?.openToilet(mView!!, toilet)
     }
 
@@ -72,7 +72,7 @@ class HomePresenter(router: HomeContract.Router,
 
     }
 
-    override fun getToiletsList(): ArrayList<ToiletsBean>? {
+    override fun getToiletsList(): ArrayList<ToiletBean>? {
         return mToilets
     }
 
@@ -84,12 +84,12 @@ class HomePresenter(router: HomeContract.Router,
         mRouter?.goToList(mView!!, true, myPosition)
     }
 
-    inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<ArrayList<ToiletsBean>>() {
+    inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<ArrayList<ToiletBean>>() {
         override fun onComplete() {
             // Nothing to do
         }
 
-        override fun onNext(toilets: ArrayList<ToiletsBean>) {
+        override fun onNext(toilets: ArrayList<ToiletBean>) {
             mToilets = toilets
             favorites?.let {
                 checkFavorites(mToilets!!, favorites)
@@ -103,7 +103,7 @@ class HomePresenter(router: HomeContract.Router,
         }
     }
 
-    private fun checkFavorites(toilets: ArrayList<ToiletsBean>, favorites: List<FavoriteBean>) {
+    private fun checkFavorites(toilets: ArrayList<ToiletBean>, favorites: List<FavoriteBean>) {
         for (toilet in toilets) {
             toilet.isFavorite = favorites.contains(FavoriteBean(toilet.id))
         }

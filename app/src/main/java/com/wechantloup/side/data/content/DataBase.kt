@@ -2,9 +2,9 @@ package com.wechantloup.side.data.content
 
 import androidx.room.*
 import com.wechantloup.side.domain.bean.FavoriteBean
-import com.wechantloup.side.domain.bean.ToiletsBean
+import com.wechantloup.side.domain.bean.ToiletBean
 
-@Database(entities = [ToiletsBean::class, FavoriteBean::class], version = 1, exportSchema = false)
+@Database(entities = [ToiletBean::class, FavoriteBean::class], version = 1, exportSchema = false)
 @TypeConverters(DataBase.LocationConverter::class)
 abstract class DataBase : RoomDatabase() {
 
@@ -15,10 +15,10 @@ abstract class DataBase : RoomDatabase() {
     interface ToiletsDao {
 
         @Query("SELECT * FROM toilets")
-        fun getAll():List<ToiletsBean>
+        fun getAll():List<ToiletBean>
 
         @Insert
-        fun insertAll(resources: List<ToiletsBean>)
+        fun insertAll(resources: List<ToiletBean>)
 
         @Query("DELETE FROM toilets")
         fun deleteAll(): Int

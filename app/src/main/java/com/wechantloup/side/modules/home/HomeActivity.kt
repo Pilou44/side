@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.wechantloup.side.R
-import com.wechantloup.side.domain.bean.ToiletsBean
+import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.modules.core.BaseActivity
 
 class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, OnMapReadyCallback, LocationListener,
@@ -184,7 +184,7 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
     }
 
     override fun onInfoWindowClick(marker: Marker) {
-        mPresenter.openToilet(marker.tag as ToiletsBean)
+        mPresenter.openToilet(marker.tag as ToiletBean)
     }
 
     override fun notifyItemModified() {

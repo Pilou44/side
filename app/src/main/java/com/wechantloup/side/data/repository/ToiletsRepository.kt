@@ -1,7 +1,7 @@
 package com.wechantloup.side.data.repository
 
 import com.wechantloup.side.data.content.DataBase
-import com.wechantloup.side.domain.bean.ToiletsBean
+import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.domain.bean.ToiletsListBean
 import io.reactivex.Observable
 import retrofit2.Retrofit
@@ -22,12 +22,12 @@ constructor(retrofit: Retrofit, dataBase: DataBase) {
         return mService.getToilets()
     }
 
-    fun saveToilets(list: List<ToiletsBean>) {
+    fun saveToilets(list: List<ToiletBean>) {
         mToiletsDao.deleteAll()
         mToiletsDao.insertAll(list)
     }
 
-    fun loadToilets(): List<ToiletsBean> {
+    fun loadToilets(): List<ToiletBean> {
         return mToiletsDao.getAll()
     }
 

@@ -6,13 +6,13 @@ import android.view.View
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import com.wechantloup.side.R
-import com.wechantloup.side.domain.bean.ToiletsBean
+import com.wechantloup.side.domain.bean.ToiletBean
 import kotlinx.android.synthetic.main.item_marker_details.view.*
 
 
 class CustomInfoWindowAdapter(private var context: Context): GoogleMap.InfoWindowAdapter {
     override fun getInfoContents(marker: Marker): View? {
-        val info = marker.tag as ToiletsBean?
+        val info = marker.tag as ToiletBean?
 
         return when (info) {
             null -> null

@@ -2,7 +2,7 @@ package com.wechantloup.side.modules.details
 
 import android.util.Log
 import com.wechantloup.side.domain.bean.FavoriteBean
-import com.wechantloup.side.domain.bean.ToiletsBean
+import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.domain.usecase.AddFavoriteUseCase
 import com.wechantloup.side.domain.usecase.RemoveFavoriteUseCase
 import com.wechantloup.side.events.ModifyFavoriteEvent
@@ -19,7 +19,7 @@ class DetailsPresenter(router: DetailsContract.Router,
         private val TAG = DetailsPresenter::class.java.simpleName
     }
 
-    private lateinit var mToilet: ToiletsBean
+    private lateinit var mToilet: ToiletBean
 
     override fun setFavorite(favorite: Boolean) {
         when (favorite) {
@@ -28,7 +28,7 @@ class DetailsPresenter(router: DetailsContract.Router,
         }
     }
 
-    override fun setToilet(toilet: ToiletsBean) {
+    override fun setToilet(toilet: ToiletBean) {
         mToilet = toilet
     }
 

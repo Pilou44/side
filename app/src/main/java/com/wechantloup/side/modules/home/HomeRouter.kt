@@ -2,14 +2,14 @@ package com.wechantloup.side.modules.home
 
 import android.content.Intent
 import com.google.android.gms.maps.model.LatLng
-import com.wechantloup.side.domain.bean.ToiletsBean
+import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.modules.core.BaseRouter
 import com.wechantloup.side.modules.details.DetailsActivity
 import com.wechantloup.side.modules.list.ListActivity
 
 class HomeRouter: BaseRouter(), HomeContract.Router {
 
-    override fun openToilet(view: HomeContract.View, toilet: ToiletsBean) {
+    override fun openToilet(view: HomeContract.View, toilet: ToiletBean) {
         val intent = Intent(getActivity(view), DetailsActivity::class.java)
         intent.putExtra(DetailsActivity.EXTRA_TOILET, toilet)
         getActivity(view)?.startActivity(intent)

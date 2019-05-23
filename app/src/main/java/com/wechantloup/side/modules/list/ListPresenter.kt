@@ -4,7 +4,7 @@ import android.os.Build
 import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import com.wechantloup.side.domain.bean.FavoriteBean
-import com.wechantloup.side.domain.bean.ToiletsBean
+import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.domain.usecase.AddFavoriteUseCase
 import com.wechantloup.side.domain.usecase.GetFavoritesUseCase
 import com.wechantloup.side.domain.usecase.GetToiletsUseCase
@@ -33,7 +33,7 @@ class ListPresenter(router: ListContract.Router,
     }
 
     @State @JvmField
-    var mToilets: ArrayList<ToiletsBean>? = null
+    var mToilets: ArrayList<ToiletBean>? = null
     @State @JvmField
     var mMyPosition: LatLng? = null
     @State @JvmField
@@ -75,12 +75,12 @@ class ListPresenter(router: ListContract.Router,
         mGetFavoritesUseCase.execute(GetFavoritesSubscriber())
     }
 
-    override fun getToiletsList(): ArrayList<ToiletsBean>? {
+    override fun getToiletsList(): ArrayList<ToiletBean>? {
         return mToilets
     }
 
-    private fun checkFavorites(toilets: ArrayList<ToiletsBean>, favorites: List<FavoriteBean>, showFavoritesOnly: Boolean) {
-        val favoritesList = ArrayList<ToiletsBean>()
+    private fun checkFavorites(toilets: ArrayList<ToiletBean>, favorites: List<FavoriteBean>, showFavoritesOnly: Boolean) {
+        val favoritesList = ArrayList<ToiletBean>()
         for (toilet in toilets) {
             toilet.isFavorite = favorites.contains(FavoriteBean(toilet.id))
             if (showFavoritesOnly && toilet.isFavorite) {
@@ -92,14 +92,14 @@ class ListPresenter(router: ListContract.Router,
         }
     }
 
-    override fun setFavorite(toilet: ToiletsBean) {
+    override fun setFavorite(toilet: ToiletBean) {
         when (toilet.isFavorite) {
             false -> mAddFavoriteUseCase.execute(FavoriteSubscriber(toilet), FavoriteBean(toilet.id))
             true -> mRemoveFavoriteUseCase.execute(FavoriteSubscriber(toilet), FavoriteBean(toilet.id))
         }
     }
 
-    override fun showDetails(toilet: ToiletsBean) {
+    override fun showDetails(toilet: ToiletBean) {
         mRouter?.openToilet(mView!!, toilet)
     }
 
@@ -109,7 +109,7 @@ class ListPresenter(router: ListContract.Router,
 
     override fun sortByDistance() {
         mMyPosition?.let {
-            val comparator = Comparator<ToiletsBean> { a, b ->
+            val comparator = Comparator<ToiletBean> { a, b ->
                 when {
                     a.distanceToMe < b.distanceToMe -> -1
                     a.distanceToMe > b.distanceToMe -> 1
@@ -127,7 +127,7 @@ class ListPresenter(router: ListContract.Router,
     }
 
     override fun sortByOpens() {
-        val list = ArrayList<ToiletsBean>()
+        val list = ArrayList<ToiletBean>()
 
         // Get current time in Paris
         val c = Calendar.getInstance()
@@ -160,7 +160,7 @@ class ListPresenter(router: ListContract.Router,
         mView?.notifyToiletsListRetrieved()
     }
 
-    inner class FavoriteSubscriber(private var toilet: ToiletsBean) : ResourceObserver<Void>() {
+    inner class FavoriteSubscriber(private var toilet: ToiletBean) : ResourceObserver<Void>() {
         override fun onComplete() {
             toilet.isFavorite = !toilet.isFavorite
             if (!toilet.isFavorite && mFavoritesOnly) {
@@ -183,12 +183,12 @@ class ListPresenter(router: ListContract.Router,
 
     }
 
-    inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<ArrayList<ToiletsBean>>() {
+    inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<ArrayList<ToiletBean>>() {
         override fun onComplete() {
             // Nothing to do
         }
 
-        override fun onNext(toilets: ArrayList<ToiletsBean>) {
+        override fun onNext(toilets: ArrayList<ToiletBean>) {
             mToilets = toilets
             favorites?.let {
                 checkFavorites(mToilets!!, favorites, mFavoritesOnly)

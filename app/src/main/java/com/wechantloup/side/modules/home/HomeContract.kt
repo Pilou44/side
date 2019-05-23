@@ -1,7 +1,7 @@
 package com.wechantloup.side.modules.home
 
 import com.google.android.gms.maps.model.LatLng
-import com.wechantloup.side.domain.bean.ToiletsBean
+import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.modules.core.BaseContract
 
 interface HomeContract {
@@ -13,14 +13,14 @@ interface HomeContract {
 
     interface Presenter: BaseContract.Presenter {
         fun retrieveToiletsList()
-        fun getToiletsList(): ArrayList<ToiletsBean>?
+        fun getToiletsList(): ArrayList<ToiletBean>?
         fun showAsList(myPosition: LatLng?)
-        fun openToilet(toilet: ToiletsBean)
+        fun openToilet(toilet: ToiletBean)
         fun showFavorites(myPosition: LatLng?)
     }
 
     interface Router: BaseContract.Router {
         fun goToList(view: View, favorites: Boolean, position: LatLng?)
-        fun openToilet(view: View, toilet: ToiletsBean)
+        fun openToilet(view: View, toilet: ToiletBean)
     }
 }

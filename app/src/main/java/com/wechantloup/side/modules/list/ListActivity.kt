@@ -70,6 +70,10 @@ class ListActivity: BaseActivity(), ListContract.View {
                 mPresenter.sortByDistance()
                 true
             }
+            R.id.opens_first -> {
+                mPresenter.sortByOpens()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

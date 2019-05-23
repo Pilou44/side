@@ -9,6 +9,8 @@
         <menu>
             <item android:id="@+id/sort_by_distance"
                   android:title="@string/sort_by_distance"/>
+            <item android:id="@+id/opens_first"
+                  android:title="@string/opens_first"/>
         </menu>
     </item>
 </menu>

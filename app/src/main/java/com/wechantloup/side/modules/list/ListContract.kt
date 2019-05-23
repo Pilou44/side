@@ -15,5 +15,6 @@ interface ListContract {
         fun getToiletsList(): ArrayList<ToiletsBean>?
         fun setFavorite(toilet: ToiletsBean, favorite: Boolean)
         fun sortByDistance()
+        fun sortByOpens()
     }
 }

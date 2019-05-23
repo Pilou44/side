@@ -14,6 +14,8 @@ import com.wechantloup.side.modules.core.BasePresenter
 import com.wechantloup.side.utils.calculateDistance
 import io.reactivex.observers.ResourceObserver
 import java.util.*
+import kotlin.collections.ArrayList
+import java.lang.Exception
 
 class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
                     private val mGetFavoritesUseCase: GetFavoritesUseCase,
@@ -23,6 +25,7 @@ class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
 
     companion object {
         private var TAG = ListPresenter::class.java.simpleName
+        private const val H24 = "24 h / 24"
     }
 
     private var mToilets: ArrayList<ToiletsBean>? = null
@@ -77,6 +80,40 @@ class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
                 Collections.sort(mToilets, comparator)
             }
         }
+        mView?.notifyToiletsListRetrieved()
+    }
+
+    override fun sortByOpens() {
+        val list = ArrayList<ToiletsBean>()
+
+        // Get current time in Paris
+        val c = Calendar.getInstance()
+        c.timeZone = TimeZone.getTimeZone("Europe/Paris")
+        val timeInParis = (c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE))
+
+        for (toilet in mToilets!!) {
+            val opening = toilet.getOpening()
+            if (opening == H24) {
+                list.add(toilet)
+            } else {
+                try {
+                    val opens = opening.substring(0, opening.indexOf(" h"))
+                    val closes = opening.substring(opening.indexOf("-") + 2, opening.lastIndexOf(" h"))
+                    val opensTime = opens.toLong() * 60
+                    val closesTime = closes.toLong() * 60
+                    if (timeInParis in opensTime..(closesTime - 1)) {
+                        list.add(toilet)
+                    }
+                } catch (ignored :Exception) {}
+            }
+        }
+        for (toilet in mToilets!!) {
+            if (!list.contains(toilet)) {
+                list.add(toilet)
+            }
+        }
+
+        mToilets = list
         mView?.notifyToiletsListRetrieved()
     }
 

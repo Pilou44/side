@@ -13,7 +13,7 @@ interface ListContract {
     interface Presenter: BaseContract.Presenter {
         fun retrieveToiletsList(favorites: Boolean, myPosition: LatLng?)
         fun getToiletsList(): ArrayList<ToiletsBean>?
-        fun setFavorite(toilet: ToiletsBean, favorite: Boolean)
+        fun setFavorite(toilet: ToiletsBean)
         fun sortByDistance()
         fun sortByOpens()
         fun showDetails(toilet: ToiletsBean)

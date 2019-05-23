@@ -52,10 +52,10 @@ class ListPresenter(router: ListContract.Router,
         }
     }
 
-    override fun setFavorite(toilet: ToiletsBean, favorite: Boolean) {
-        when (favorite) {
-            true -> mAddFavoriteUseCase.execute(FavoriteSubscriber(toilet), FavoriteBean(toilet.id))
-            false -> mRemoveFavoriteUseCase.execute(FavoriteSubscriber(toilet), FavoriteBean(toilet.id))
+    override fun setFavorite(toilet: ToiletsBean) {
+        when (toilet.isFavorite) {
+            false -> mAddFavoriteUseCase.execute(FavoriteSubscriber(toilet), FavoriteBean(toilet.id))
+            true -> mRemoveFavoriteUseCase.execute(FavoriteSubscriber(toilet), FavoriteBean(toilet.id))
         }
     }
 

@@ -69,6 +69,7 @@ class ListActivity: BaseActivity(), ListContract.View {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.list_menu, menu)
+        menu.findItem(R.id.sort_by_distance).isEnabled = mPresenter.getMyPositon() != null
         return true
     }
 

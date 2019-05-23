@@ -57,6 +57,10 @@ class ListPresenter(router: ListContract.Router,
         }
     }
 
+    override fun getMyPositon(): LatLng? {
+        return mMyPosition
+    }
+
     override fun retrieveToiletsList(favorites: Boolean, myPosition: LatLng?) {
         mFavoritesOnly = favorites
         mMyPosition = myPosition

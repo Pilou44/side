@@ -19,6 +19,7 @@ interface ListContract {
         fun sortByDistance()
         fun sortByOpens()
         fun showDetails(toilet: ToiletsBean)
+        fun getMyPositon(): LatLng?
     }
 
     interface Router: BaseContract.Router {

@@ -15,10 +15,9 @@ class MyApplication: DaggerApplication() {
     @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
     lateinit var mActivityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
-    private var mApplicationComponent: ApplicationComponent
+    private var mApplicationComponent: ApplicationComponent = ApplicationComponent.Initializer.init(this)
 
     init {
-        mApplicationComponent = ApplicationComponent.Initializer.init(this)
         mApplicationComponent.inject(this)
     }
 

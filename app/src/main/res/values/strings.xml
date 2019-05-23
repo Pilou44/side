@@ -6,8 +6,8 @@
     <string name="share_with">Share with</string>
     <string name="favorites">Favorites</string>
     <string name="sort_by_distance">Sort by distance</string>
-    <string name="sort_button">Sort...</string>
+    <string name="sort_button">Sort…</string>
     <string name="opens_first">Opens first</string>
     <string name="distance">At %d m</string>
-    <string name="error">An error occured</string>
+    <string name="error">An error occurred</string>
 </resources>

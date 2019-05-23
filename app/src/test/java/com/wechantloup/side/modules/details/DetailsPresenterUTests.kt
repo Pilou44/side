@@ -1,11 +1,8 @@
 package com.wechantloup.side.modules.details
 
-import com.google.android.gms.maps.model.LatLng
 import com.nhaarman.mockitokotlin2.any
 import com.wechantloup.side.domain.bean.ToiletsBean
 import com.wechantloup.side.domain.usecase.AddFavoriteUseCase
-import com.wechantloup.side.domain.usecase.GetFavoritesUseCase
-import com.wechantloup.side.domain.usecase.GetToiletsUseCase
 import com.wechantloup.side.domain.usecase.RemoveFavoriteUseCase
 import org.junit.After
 import org.junit.Before

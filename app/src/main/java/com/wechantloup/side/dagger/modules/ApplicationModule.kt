@@ -11,7 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Singleton
 
 @Module
-class ApplicationModule(var application: Application) {
+class ApplicationModule(private var application: Application) {
 
     @Provides
     @Singleton

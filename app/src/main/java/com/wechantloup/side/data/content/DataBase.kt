@@ -3,7 +3,6 @@ package com.wechantloup.side.data.content
 import androidx.room.*
 import com.wechantloup.side.domain.bean.FavoriteBean
 import com.wechantloup.side.domain.bean.ToiletsBean
-import io.reactivex.Observable
 
 @Database(entities = [ToiletsBean::class, FavoriteBean::class], version = 1, exportSchema = false)
 @TypeConverters(DataBase.LocationConverter::class)

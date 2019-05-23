@@ -7,7 +7,6 @@ import com.wechantloup.side.domain.usecase.AddFavoriteUseCase
 import com.wechantloup.side.domain.usecase.RemoveFavoriteUseCase
 import com.wechantloup.side.events.ModifyFavoriteEvent
 import com.wechantloup.side.modules.core.BasePresenter
-import com.wechantloup.side.modules.list.ListPresenter
 import io.reactivex.observers.ResourceObserver
 import org.greenrobot.eventbus.EventBus
 

@@ -17,7 +17,7 @@ class CustomInfoWindowAdapter(private var context: Context): GoogleMap.InfoWindo
         return when (info) {
             null -> null
             else -> {
-                val view = LayoutInflater.from(context).inflate(R.layout.item_marker_details, null, false);
+                val view = LayoutInflater.from(context).inflate(R.layout.item_marker_details, null, false)
 
                 val addressTv = view.address
                 val administratorTv = view.administrator

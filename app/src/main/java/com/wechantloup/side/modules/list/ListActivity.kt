@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
@@ -52,7 +53,14 @@ class ListActivity: BaseActivity<ListContract.Presenter>(), ListContract.View {
 
     override fun notifyToiletsListRetrieved() {
         swipe.isRefreshing = false
-        mAdapter.notifyDataSetChanged()
+        if (mPresenter.getToiletsList().isNullOrEmpty()) {
+            rv.visibility = View.GONE
+            no_toilet.visibility = View.VISIBLE
+        } else {
+            rv.visibility = View.VISIBLE
+            no_toilet.visibility = View.GONE
+            mAdapter.notifyDataSetChanged()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

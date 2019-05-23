@@ -7,7 +7,7 @@ abstract class BaseRouter: BaseContract.Router {
 
     protected fun getActivity(view: BaseContract.View): Activity? {
         return when (view) {
-            is BaseActivity -> view
+            is BaseActivity<*> -> view
             is Fragment -> (view as Fragment).activity
             else -> null
         }

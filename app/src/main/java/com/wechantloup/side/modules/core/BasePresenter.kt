@@ -1,5 +1,8 @@
 package com.wechantloup.side.modules.core
 
+import android.os.Bundle
+import icepick.Icepick
+
 abstract class BasePresenter<R: BaseContract.Router, V: BaseContract.View>(protected val mRouter: R?): BaseContract.Presenter {
 
     protected var mView: V? = null
@@ -12,5 +15,13 @@ abstract class BasePresenter<R: BaseContract.Router, V: BaseContract.View>(prote
         if (mView == view) {
             mView = null
         }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        Icepick.restoreInstanceState(this, savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        Icepick.saveInstanceState(this, outState)
     }
 }

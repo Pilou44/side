@@ -5,6 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 ext {
     daggerVersion = '2.21'
+    icepickVersion = '3.2.0'
     retrofitVersion = '2.5.0'
     roomVersion = '2.0.0'
     stethoVersion = '1.5.0'
@@ -74,6 +75,10 @@ dependencies {
 
     // EVENT BUS
     implementation 'org.greenrobot:eventbus:3.1.1'
+
+    // ICE PICK
+    implementation "frankiesardo:icepick:$icepickVersion"
+    kapt "frankiesardo:icepick-processor:$icepickVersion"
 
     // TEST
     testImplementation 'junit:junit:4.12'

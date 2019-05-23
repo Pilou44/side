@@ -23,10 +23,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.wechantloup.side.R
 import com.wechantloup.side.domain.bean.ToiletsBean
 import com.wechantloup.side.modules.core.BaseActivity
-import dagger.android.AndroidInjection
-import javax.inject.Inject
 
-class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, LocationListener,
+class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, OnMapReadyCallback, LocationListener,
     GoogleMap.OnInfoWindowClickListener {
 
     companion object {
@@ -34,9 +32,6 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
         private const val LOCATION_REFRESH_TIME = 2000L // ms
         private const val LOCATION_REFRESH_DISTANCE = 2F // m
     }
-
-    @Inject
-    internal lateinit var mPresenter: HomeContract.Presenter
 
     private var mMap: GoogleMap? = null
     private var mLocationManager: LocationManager? = null
@@ -46,10 +41,6 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-
-        AndroidInjection.inject(this)
-
-        mPresenter.subscribe(this)
 
         mPresenter.retrieveToiletsList()
 
@@ -66,11 +57,6 @@ class HomeActivity: BaseActivity(), HomeContract.View, OnMapReadyCallback, Locat
                 PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
             )
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mPresenter.unsubscribe(this)
     }
 
     override fun onResume() {

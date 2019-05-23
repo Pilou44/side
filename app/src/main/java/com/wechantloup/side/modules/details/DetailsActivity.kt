@@ -8,26 +8,17 @@ import android.view.View
 import com.wechantloup.side.R
 import com.wechantloup.side.domain.bean.ToiletsBean
 import com.wechantloup.side.modules.core.BaseActivity
-import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_details.*
-import javax.inject.Inject
 
-class DetailsActivity: BaseActivity(), DetailsContract.View {
+class DetailsActivity: BaseActivity<DetailsContract.Presenter>(), DetailsContract.View {
 
     companion object {
         const val EXTRA_TOILET = "toilet"
     }
 
-    @Inject
-    internal lateinit var mPresenter: DetailsContract.Presenter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.wechantloup.side.R.layout.activity_details)
-
-        AndroidInjection.inject(this)
-
-        mPresenter.subscribe(this)
 
         val toilet = intent.getParcelableExtra<ToiletsBean>(EXTRA_TOILET)
         mPresenter.setToilet(toilet)
@@ -48,11 +39,6 @@ class DetailsActivity: BaseActivity(), DetailsContract.View {
         }
 
         favorite.setOnCheckedChangeListener { _, isChecked -> mPresenter.setFavorite(isChecked)}
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mPresenter.unsubscribe(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -9,28 +9,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.maps.model.LatLng
 import com.wechantloup.side.R
 import com.wechantloup.side.modules.core.BaseActivity
-import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_list.*
-import javax.inject.Inject
 
-class ListActivity: BaseActivity(), ListContract.View {
+class ListActivity: BaseActivity<ListContract.Presenter>(), ListContract.View {
 
     companion object {
         const val EXTRA_FAVORITES = "favorites"
         const val EXTRA_POSITION = "position"
     }
 
-    @Inject
-    internal lateinit var mPresenter: ListContract.Presenter
     private lateinit var mAdapter: ListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.wechantloup.side.R.layout.activity_list)
-
-        AndroidInjection.inject(this)
-
-        mPresenter.subscribe(this)
 
         val favorites = intent.getBooleanExtra(EXTRA_FAVORITES, false)
         val myPosition = intent.getParcelableExtra<LatLng?>(EXTRA_POSITION)
@@ -46,11 +38,6 @@ class ListActivity: BaseActivity(), ListContract.View {
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         swipe.setOnRefreshListener { mPresenter.retrieveToiletsList(favorites, myPosition) }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mPresenter.unsubscribe(this)
     }
 
     override fun notifyItemModified(position: Int) {

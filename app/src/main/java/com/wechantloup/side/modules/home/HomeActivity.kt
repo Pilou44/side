@@ -123,14 +123,23 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
 
     override fun notifyToiletsListRetrieved() {
         mDataReady = true
-        mMap?.let { displayToilets() }
+        mMap?.let {
+            displayToilets()
+        }
     }
 
     private fun displayToilets() {
+        mMap?.clear()
+        mPositionMarker = null
         val toilets = mPresenter.getToiletsList()
         for (toilet in toilets!!) {
-            val marker = mMap!!.addMarker(MarkerOptions().position(toilet.getPosition()))//.title("je suis la").icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
+            val marker = mMap!!.addMarker(MarkerOptions().position(toilet.getPosition()))
             marker.tag = toilet
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            val location = mLocationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            val position = LatLng(location.latitude, location.longitude)
+            mPositionMarker = mMap?.addMarker(MarkerOptions().position(position).icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
         }
     }
 
@@ -177,7 +186,6 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
     }
 
     override fun notifyItemModified() {
-        mMap?.clear()
         mMap?.let { displayToilets() }
     }
 }

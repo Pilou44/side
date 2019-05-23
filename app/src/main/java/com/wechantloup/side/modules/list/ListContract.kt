@@ -9,17 +9,18 @@ interface ListContract {
     interface View: BaseContract.View {
         fun notifyToiletsListRetrieved()
         fun notifyItemModified(position: Int)
-        fun notifyitemRemoved(position: Int)
+        fun notifyItemRemoved(position: Int)
     }
 
     interface Presenter: BaseContract.Presenter {
         fun retrieveToiletsList(favorites: Boolean, myPosition: LatLng?)
+        fun retrieveToiletsList()
         fun getToiletsList(): ArrayList<ToiletsBean>?
         fun setFavorite(toilet: ToiletsBean)
         fun sortByDistance()
         fun sortByOpens()
         fun showDetails(toilet: ToiletsBean)
-        fun getMyPositon(): LatLng?
+        fun getMyLocation(): LatLng?
     }
 
     interface Router: BaseContract.Router {

@@ -24,9 +24,11 @@ class ListActivity: BaseActivity<ListContract.Presenter>(), ListContract.View {
         super.onCreate(savedInstanceState)
         setContentView(com.wechantloup.side.R.layout.activity_list)
 
-        val favorites = intent.getBooleanExtra(EXTRA_FAVORITES, false)
-        val myPosition = intent.getParcelableExtra<LatLng?>(EXTRA_POSITION)
-        mPresenter.retrieveToiletsList(favorites, myPosition)
+        if (savedInstanceState == null) {
+            val favorites = intent.getBooleanExtra(EXTRA_FAVORITES, false)
+            val myPosition = intent.getParcelableExtra<LatLng?>(EXTRA_POSITION)
+            mPresenter.retrieveToiletsList(favorites, myPosition)
+        }
 
         mAdapter = ListAdapter(mPresenter)
         rv.setHasFixedSize(true)
@@ -37,14 +39,14 @@ class ListActivity: BaseActivity<ListContract.Presenter>(), ListContract.View {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        swipe.setOnRefreshListener { mPresenter.retrieveToiletsList(favorites, myPosition) }
+        swipe.setOnRefreshListener { mPresenter.retrieveToiletsList() }
     }
 
     override fun notifyItemModified(position: Int) {
         mAdapter.notifyItemChanged(position)
     }
 
-    override fun notifyitemRemoved(position: Int) {
+    override fun notifyItemRemoved(position: Int) {
         mAdapter.notifyItemRemoved(position)
     }
 
@@ -56,7 +58,7 @@ class ListActivity: BaseActivity<ListContract.Presenter>(), ListContract.View {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.list_menu, menu)
-        menu.findItem(R.id.sort_by_distance).isEnabled = mPresenter.getMyPositon() != null
+        menu.findItem(R.id.sort_by_distance).isEnabled = mPresenter.getMyLocation() != null
         return true
     }
 

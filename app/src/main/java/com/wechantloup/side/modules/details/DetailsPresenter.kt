@@ -32,6 +32,10 @@ class DetailsPresenter(router: DetailsContract.Router,
         mRouter?.share(mView!!, text)
     }
 
+    override fun onContextRestored() {
+        // Nothing to do
+    }
+
     inner class FavoriteSubscriber : ResourceObserver<Void>() {
         override fun onComplete() {
             mToilet.isFavorite = !mToilet.isFavorite

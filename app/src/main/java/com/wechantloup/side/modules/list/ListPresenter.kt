@@ -13,6 +13,7 @@ import com.wechantloup.side.events.ModifyFavoriteEvent
 import com.wechantloup.side.modules.core.BaseContract
 import com.wechantloup.side.modules.core.BasePresenter
 import com.wechantloup.side.utils.calculateDistance
+import icepick.State
 import io.reactivex.observers.ResourceObserver
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -31,9 +32,12 @@ class ListPresenter(router: ListContract.Router,
         private const val H24 = "24 h / 24"
     }
 
-    private var mToilets: ArrayList<ToiletsBean>? = null
-    private var mMyPosition: LatLng? = null
-    private var mFavoritesOnly: Boolean = false
+    @State @JvmField
+    var mToilets: ArrayList<ToiletsBean>? = null
+    @State @JvmField
+    var mMyPosition: LatLng? = null
+    @State @JvmField
+    var mFavoritesOnly: Boolean = false
 
     override fun subscribe(view: BaseContract.View) {
         super.subscribe(view)
@@ -50,20 +54,24 @@ class ListPresenter(router: ListContract.Router,
         val index = mToilets!!.indexOf(event.toilet)
         if (mFavoritesOnly) {
             mToilets!!.removeAt(index)
-            mView?.notifyitemRemoved(index)
+            mView?.notifyItemRemoved(index)
         } else {
             mToilets!![index].isFavorite = event.toilet.isFavorite
             mView?.notifyItemModified(index)
         }
     }
 
-    override fun getMyPositon(): LatLng? {
+    override fun getMyLocation(): LatLng? {
         return mMyPosition
     }
 
     override fun retrieveToiletsList(favorites: Boolean, myPosition: LatLng?) {
         mFavoritesOnly = favorites
         mMyPosition = myPosition
+        mGetFavoritesUseCase.execute(GetFavoritesSubscriber())
+    }
+
+    override fun retrieveToiletsList() {
         mGetFavoritesUseCase.execute(GetFavoritesSubscriber())
     }
 
@@ -93,6 +101,10 @@ class ListPresenter(router: ListContract.Router,
 
     override fun showDetails(toilet: ToiletsBean) {
         mRouter?.openToilet(mView!!, toilet)
+    }
+
+    override fun onContextRestored() {
+        mView?.notifyToiletsListRetrieved()
     }
 
     override fun sortByDistance() {
@@ -154,7 +166,7 @@ class ListPresenter(router: ListContract.Router,
             if (!toilet.isFavorite && mFavoritesOnly) {
                 val index = mToilets!!.indexOf(toilet)
                 mToilets!!.removeAt(index)
-                mView?.notifyitemRemoved(index)
+                mView?.notifyItemRemoved(index)
             }
         }
 

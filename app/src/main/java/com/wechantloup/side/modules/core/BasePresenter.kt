@@ -19,6 +19,7 @@ abstract class BasePresenter<R: BaseContract.Router, V: BaseContract.View>(prote
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         Icepick.restoreInstanceState(this, savedInstanceState)
+        onContextRestored()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

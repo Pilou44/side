@@ -42,8 +42,6 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        mPresenter.retrieveToiletsList()
-
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
@@ -56,6 +54,10 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
             )
+        }
+
+        if (savedInstanceState == null) {
+            mPresenter.retrieveToiletsList()
         }
     }
 

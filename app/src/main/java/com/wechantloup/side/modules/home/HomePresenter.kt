@@ -9,6 +9,7 @@ import com.wechantloup.side.domain.usecase.GetToiletsUseCase
 import com.wechantloup.side.events.ModifyFavoriteEvent
 import com.wechantloup.side.modules.core.BaseContract
 import com.wechantloup.side.modules.core.BasePresenter
+import icepick.State
 import io.reactivex.observers.ResourceObserver
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -22,7 +23,8 @@ class HomePresenter(router: HomeContract.Router,
         private var TAG = HomePresenter::class.java.simpleName
     }
 
-    private var mToilets: ArrayList<ToiletsBean>? = null
+    @State @JvmField
+    var mToilets: ArrayList<ToiletsBean>? = null
 
     override fun subscribe(view: BaseContract.View) {
         super.subscribe(view)
@@ -47,6 +49,10 @@ class HomePresenter(router: HomeContract.Router,
 
     override fun retrieveToiletsList() {
         mGetFavoritesUseCase.execute(GetFavoritesSubscriber())
+    }
+
+    override fun onContextRestored() {
+        mView?.notifyToiletsListRetrieved()
     }
 
     inner class GetFavoritesSubscriber : ResourceObserver<List<FavoriteBean>>() {

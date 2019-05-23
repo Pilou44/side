@@ -13,6 +13,7 @@ interface BaseContract {
         fun onSaveInstanceState(outState: Bundle)
         fun subscribe(view: View)
         fun unsubscribe(view: View)
+        fun onContextRestored()
     }
 
     interface Router {

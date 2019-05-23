@@ -133,7 +133,7 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
         mPositionMarker = null
         val toilets = mPresenter.getToiletsList()
         for (toilet in toilets!!) {
-            val marker = mMap!!.addMarker(MarkerOptions().position(toilet.getPosition()))
+            val marker = mMap!!.addMarker(MarkerOptions().position(toilet.getPosition()).icon(BitmapDescriptorFactory.fromResource(R.drawable.toilet_marker)))
             marker.tag = toilet
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {

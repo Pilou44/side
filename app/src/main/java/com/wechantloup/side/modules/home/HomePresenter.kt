@@ -24,7 +24,7 @@ class HomePresenter(router: HomeContract.Router,
     }
 
     @State @JvmField
-    var mToilets: ArrayList<ToiletBean>? = null
+    var mToilets: ArrayList<ToiletBean> = ArrayList()
 
     override fun subscribe(view: BaseContract.View) {
         super.subscribe(view)
@@ -38,8 +38,8 @@ class HomePresenter(router: HomeContract.Router,
 
     @Subscribe
     fun onModifyFavoriteEvent(event: ModifyFavoriteEvent) {
-        val index = mToilets!!.indexOf(event.toilet)
-        mToilets!![index].isFavorite = event.toilet.isFavorite
+        val index = mToilets.indexOf(event.toilet)
+        mToilets[index].isFavorite = event.toilet.isFavorite
         mView?.notifyItemModified()
     }
 
@@ -84,15 +84,16 @@ class HomePresenter(router: HomeContract.Router,
         mRouter?.goToList(mView!!, true, myPosition)
     }
 
-    inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<ArrayList<ToiletBean>>() {
+    inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<List<ToiletBean>>() {
         override fun onComplete() {
             // Nothing to do
         }
 
-        override fun onNext(toilets: ArrayList<ToiletBean>) {
-            mToilets = toilets
+        override fun onNext(toilets: List<ToiletBean>) {
+            mToilets.clear()
+            mToilets.addAll(toilets)
             favorites?.let {
-                checkFavorites(mToilets!!, favorites)
+                checkFavorites(mToilets, favorites)
             }
             mView?.notifyToiletsListRetrieved()
         }

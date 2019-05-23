@@ -10,9 +10,9 @@ import javax.inject.Inject
 @PerApplicationView
 class GetToiletsUseCase
 
-@Inject internal constructor(scheduler: Scheduler, private val mRepository: ToiletsRepository): UseCase<ArrayList<ToiletBean>, Void>(scheduler) {
+@Inject internal constructor(scheduler: Scheduler, private val mRepository: ToiletsRepository): UseCase<List<ToiletBean>, Void>(scheduler) {
 
-    override fun buildObservable(params: Void?): Observable<ArrayList<ToiletBean>> {
+    override fun buildObservable(params: Void?): Observable<List<ToiletBean>> {
         return mRepository.getToilets().flatMap {
             mRepository.saveToilets(it.list)
             Observable.just(it.list)
@@ -21,9 +21,7 @@ class GetToiletsUseCase
             if (list.isEmpty()) {
                 throw Exception("No data in cache")
             } else {
-                val array = ArrayList<ToiletBean>()
-                array.addAll(list)
-                array
+                list
             }
         }
     }

@@ -7,5 +7,5 @@ data class ToiletsListBean(
     var count: Int,
 
     @SerializedName("records")
-    var list: ArrayList<ToiletBean>
+    var list: List<ToiletBean>
 )

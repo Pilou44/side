@@ -33,7 +33,7 @@ class ListPresenter(router: ListContract.Router,
     }
 
     @State @JvmField
-    var mToilets: ArrayList<ToiletBean>? = null
+    var mToilets: ArrayList<ToiletBean> = ArrayList()
     @State @JvmField
     var mMyPosition: LatLng? = null
     @State @JvmField
@@ -51,12 +51,12 @@ class ListPresenter(router: ListContract.Router,
 
     @Subscribe
     fun onModifyFavoriteEvent(event: ModifyFavoriteEvent) {
-        val index = mToilets!!.indexOf(event.toilet)
+        val index = mToilets.indexOf(event.toilet)
         if (mFavoritesOnly) {
-            mToilets!!.removeAt(index)
+            mToilets.removeAt(index)
             mView?.notifyItemRemoved(index)
         } else {
-            mToilets!![index].isFavorite = event.toilet.isFavorite
+            mToilets[index].isFavorite = event.toilet.isFavorite
             mView?.notifyItemModified(index)
         }
     }
@@ -88,7 +88,8 @@ class ListPresenter(router: ListContract.Router,
             }
         }
         if (showFavoritesOnly) {
-            mToilets = favoritesList
+            mToilets.clear()
+            mToilets.addAll(favoritesList)
         }
     }
 
@@ -118,7 +119,7 @@ class ListPresenter(router: ListContract.Router,
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                mToilets!!.sortWith(comparator)
+                mToilets.sortWith(comparator)
             } else {
                 Collections.sort(mToilets, comparator)
             }
@@ -134,7 +135,7 @@ class ListPresenter(router: ListContract.Router,
         c.timeZone = TimeZone.getTimeZone("Europe/Paris")
         val timeInParis = (c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE))
 
-        for (toilet in mToilets!!) {
+        for (toilet in mToilets) {
             val opening = toilet.getOpening()
             if (opening == H24) {
                 list.add(toilet)
@@ -150,13 +151,14 @@ class ListPresenter(router: ListContract.Router,
                 } catch (ignored :Exception) {}
             }
         }
-        for (toilet in mToilets!!) {
+        for (toilet in mToilets) {
             if (!list.contains(toilet)) {
                 list.add(toilet)
             }
         }
 
-        mToilets = list
+        mToilets.clear()
+        mToilets.addAll(list)
         mView?.notifyToiletsListRetrieved()
     }
 
@@ -164,8 +166,8 @@ class ListPresenter(router: ListContract.Router,
         override fun onComplete() {
             toilet.isFavorite = !toilet.isFavorite
             if (!toilet.isFavorite && mFavoritesOnly) {
-                val index = mToilets!!.indexOf(toilet)
-                mToilets!!.removeAt(index)
+                val index = mToilets.indexOf(toilet)
+                mToilets.removeAt(index)
                 mView?.notifyItemRemoved(index)
             }
         }
@@ -176,26 +178,27 @@ class ListPresenter(router: ListContract.Router,
 
         override fun onError(e: Throwable) {
             Log.e(TAG, "Error modifying favorite", e)
-            val index = mToilets!!.indexOf(toilet)
+            val index = mToilets.indexOf(toilet)
             mView?.notifyItemModified(index)
             mView?.notifyError()
         }
 
     }
 
-    inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<ArrayList<ToiletBean>>() {
+    inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<List<ToiletBean>>() {
         override fun onComplete() {
             // Nothing to do
         }
 
-        override fun onNext(toilets: ArrayList<ToiletBean>) {
-            mToilets = toilets
+        override fun onNext(toilets: List<ToiletBean>) {
+            mToilets.clear()
+            mToilets.addAll(toilets)
             favorites?.let {
-                checkFavorites(mToilets!!, favorites, mFavoritesOnly)
+                checkFavorites(mToilets, favorites, mFavoritesOnly)
             }
 
             mMyPosition?.let {
-                for (toilet in mToilets!!) {
+                for (toilet in mToilets) {
                     toilet.distanceToMe = calculateDistance(mMyPosition!!, toilet.getPosition())
                 }
             }

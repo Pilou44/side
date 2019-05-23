@@ -5,7 +5,7 @@ import android.os.Bundle
 interface BaseContract {
 
     interface View {
-
+        fun notifyError()
     }
 
     interface Presenter {
@@ -16,7 +16,5 @@ interface BaseContract {
         fun onContextRestored()
     }
 
-    interface Router {
-
-    }
+    interface Router
 }

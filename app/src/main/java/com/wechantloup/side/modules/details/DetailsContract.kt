@@ -6,7 +6,7 @@ import com.wechantloup.side.modules.core.BaseContract
 interface DetailsContract {
 
     interface View: BaseContract.View {
-
+        fun notifyErrorModifyingFavorite(toilet: ToiletsBean)
     }
 
     interface Presenter: BaseContract.Presenter {

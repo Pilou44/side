@@ -65,8 +65,9 @@ class HomePresenter(router: HomeContract.Router,
         }
 
         override fun onError(e: Throwable) {
-            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            Log.e(TAG, "Error getting favorites list", e)
             mGetToiletsUseCase.execute(GetToiletsSubscriber(null))
+            mView?.notifyError()
         }
 
     }
@@ -75,12 +76,12 @@ class HomePresenter(router: HomeContract.Router,
         return mToilets
     }
 
-    override fun showAsList(position: LatLng?) {
-        mRouter?.goToList(mView!!, false, position)
+    override fun showAsList(myPosition: LatLng?) {
+        mRouter?.goToList(mView!!, false, myPosition)
     }
 
-    override fun showFavorites(position: LatLng?) {
-        mRouter?.goToList(mView!!, true, position)
+    override fun showFavorites(myPosition: LatLng?) {
+        mRouter?.goToList(mView!!, true, myPosition)
     }
 
     inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<ArrayList<ToiletsBean>>() {
@@ -98,7 +99,7 @@ class HomePresenter(router: HomeContract.Router,
 
         override fun onError(e: Throwable) {
             Log.e(TAG, "Error getting toilets list", e)
-            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            mView?.notifyError()
         }
     }
 

@@ -175,7 +175,10 @@ class ListPresenter(router: ListContract.Router,
         }
 
         override fun onError(e: Throwable) {
-            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            Log.e(TAG, "Error modifying favorite", e)
+            val index = mToilets!!.indexOf(toilet)
+            mView?.notifyItemModified(index)
+            mView?.notifyError()
         }
 
     }
@@ -201,7 +204,8 @@ class ListPresenter(router: ListContract.Router,
 
         override fun onError(e: Throwable) {
             Log.e(TAG, "Error getting toilets list", e)
-            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            mView?.notifyToiletsListRetrieved()
+            mView?.notifyError()
         }
     }
 
@@ -215,8 +219,9 @@ class ListPresenter(router: ListContract.Router,
         }
 
         override fun onError(e: Throwable) {
-            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            Log.e(TAG, "Error getting favorites list", e)
             mGetToiletsUseCase.execute(GetToiletsSubscriber(null))
+            mView?.notifyError()
         }
 
     }

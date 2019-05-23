@@ -41,6 +41,10 @@ class DetailsActivity: BaseActivity<DetailsContract.Presenter>(), DetailsContrac
         favorite.setOnCheckedChangeListener { _, isChecked -> mPresenter.setFavorite(isChecked)}
     }
 
+    override fun notifyErrorModifyingFavorite(toilet: ToiletsBean) {
+        favorite.isChecked = toilet.isFavorite
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.details_menu, menu)

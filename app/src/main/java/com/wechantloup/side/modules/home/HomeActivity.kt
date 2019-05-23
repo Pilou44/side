@@ -110,15 +110,15 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // Nothing to do
     }
 
     override fun onProviderEnabled(provider: String?) {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // Nothing to do
     }
 
     override fun onProviderDisabled(provider: String?) {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // Nothing to do
     }
 
     override fun notifyToiletsListRetrieved() {

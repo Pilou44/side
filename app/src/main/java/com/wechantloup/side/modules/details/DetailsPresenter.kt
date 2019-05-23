@@ -1,11 +1,13 @@
 package com.wechantloup.side.modules.details
 
+import android.util.Log
 import com.wechantloup.side.domain.bean.FavoriteBean
 import com.wechantloup.side.domain.bean.ToiletsBean
 import com.wechantloup.side.domain.usecase.AddFavoriteUseCase
 import com.wechantloup.side.domain.usecase.RemoveFavoriteUseCase
 import com.wechantloup.side.events.ModifyFavoriteEvent
 import com.wechantloup.side.modules.core.BasePresenter
+import com.wechantloup.side.modules.list.ListPresenter
 import io.reactivex.observers.ResourceObserver
 import org.greenrobot.eventbus.EventBus
 
@@ -13,6 +15,10 @@ class DetailsPresenter(router: DetailsContract.Router,
                        private val mAddFavoriteUseCase: AddFavoriteUseCase,
                        private val mRemoveFavoriteUseCase: RemoveFavoriteUseCase) :
     BasePresenter<DetailsContract.Router, DetailsContract.View>(router), DetailsContract.Presenter {
+
+    companion object {
+        private val TAG = DetailsPresenter::class.java.simpleName
+    }
 
     private lateinit var mToilet: ToiletsBean
 
@@ -47,7 +53,9 @@ class DetailsPresenter(router: DetailsContract.Router,
         }
 
         override fun onError(e: Throwable) {
-            //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            Log.e(TAG, "Error modifying favorite", e)
+            mView?.notifyErrorModifyingFavorite(mToilet)
+            mView?.notifyError()
         }
 
     }

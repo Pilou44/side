@@ -18,9 +18,13 @@ class GetToiletsUseCase
             Observable.just(it.list)
         }.onErrorReturn{
             val list = mRepository.loadToilets()
-            val array = ArrayList<ToiletsBean>()
-            array.addAll(list)
-            array
+            if (list.isEmpty()) {
+                throw Exception("No data in cache")
+            } else {
+                val array = ArrayList<ToiletsBean>()
+                array.addAll(list)
+                array
+            }
         }
     }
 }

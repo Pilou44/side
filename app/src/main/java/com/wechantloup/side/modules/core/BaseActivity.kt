@@ -1,7 +1,9 @@
 package com.wechantloup.side.modules.core
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.wechantloup.side.R
 import dagger.android.AndroidInjection
 import icepick.Icepick
 import javax.inject.Inject
@@ -28,9 +30,13 @@ abstract class BaseActivity<T: BaseContract.Presenter>: AppCompatActivity(), Bas
         mPresenter.onRestoreInstanceState(savedInstanceState)
     }
 
-    public override fun onSaveInstanceState(outState: Bundle) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Icepick.saveInstanceState(this, outState)
         mPresenter.onSaveInstanceState(outState)
+    }
+
+    override fun notifyError() {
+        Toast.makeText(this, R.string.error, Toast.LENGTH_LONG).show()
     }
 }

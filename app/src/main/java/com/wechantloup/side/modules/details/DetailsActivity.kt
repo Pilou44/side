@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import com.wechantloup.side.R
 import com.wechantloup.side.domain.bean.ToiletsBean
 import com.wechantloup.side.modules.core.BaseActivity
@@ -38,6 +39,13 @@ class DetailsActivity: BaseActivity(), DetailsContract.View {
         address.text = toilet.getAddress()
         administrator.text = toilet.getAdministrator()
         opening_time.text = toilet.getOpening()
+
+        if (toilet.distanceToMe >= 0) {
+            distance.visibility = View.VISIBLE
+            distance.text = getString(R.string.distance, toilet.distanceToMe.toInt())
+        } else {
+            distance.visibility = View.GONE
+        }
 
         favorite.setOnCheckedChangeListener { _, isChecked -> mPresenter.setFavorite(isChecked)}
     }

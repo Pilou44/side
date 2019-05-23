@@ -2,8 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="@dimen/general_padding">
 
     <CheckBox
             android:id="@+id/favorite"
@@ -14,25 +16,45 @@
             style="?android:attr/starStyle"/>
 
     <TextView
-            android:id="@+id/address"
+            android:id="@+id/administrator"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/favorite"/>
+            app:layout_constraintEnd_toStartOf="@id/favorite"
+            tools:text="Captain Superslip"
+            android:textStyle="bold"/>
+
+    <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/footer_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="administrator,favorite"/>
+
+    <TextView
+            android:id="@+id/address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/footer_barrier"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="26 rue de l'Ormelette"/>
+
+    <TextView
+            android:id="@+id/distance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/address"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="At 400 km"/>
 
     <TextView
             android:id="@+id/opening_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/address"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-            android:id="@+id/administrator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/opening_time"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/distance"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="24 h / 24"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

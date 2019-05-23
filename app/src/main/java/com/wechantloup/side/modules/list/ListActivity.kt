@@ -22,7 +22,6 @@ class ListActivity: BaseActivity(), ListContract.View {
 
     @Inject
     internal lateinit var mPresenter: ListContract.Presenter
-
     private lateinit var mAdapter: ListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +49,14 @@ class ListActivity: BaseActivity(), ListContract.View {
     override fun onDestroy() {
         super.onDestroy()
         mPresenter.unsubscribe(this)
+    }
+
+    override fun notifyItemModified(position: Int) {
+        mAdapter.notifyItemChanged(position)
+    }
+
+    override fun notifyitemRemoved(position: Int) {
+        mAdapter.notifyItemRemoved(position)
     }
 
     override fun notifyToiletsListRetrieved() {

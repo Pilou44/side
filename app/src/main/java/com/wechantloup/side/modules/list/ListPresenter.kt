@@ -9,9 +9,13 @@ import com.wechantloup.side.domain.usecase.AddFavoriteUseCase
 import com.wechantloup.side.domain.usecase.GetFavoritesUseCase
 import com.wechantloup.side.domain.usecase.GetToiletsUseCase
 import com.wechantloup.side.domain.usecase.RemoveFavoriteUseCase
+import com.wechantloup.side.events.ModifyFavoriteEvent
+import com.wechantloup.side.modules.core.BaseContract
 import com.wechantloup.side.modules.core.BasePresenter
 import com.wechantloup.side.utils.calculateDistance
 import io.reactivex.observers.ResourceObserver
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -29,10 +33,34 @@ class ListPresenter(router: ListContract.Router,
 
     private var mToilets: ArrayList<ToiletsBean>? = null
     private var mMyPosition: LatLng? = null
+    private var mFavoritesOnly: Boolean = false
+
+    override fun subscribe(view: BaseContract.View) {
+        super.subscribe(view)
+        EventBus.getDefault().register(this)
+    }
+
+    override fun unsubscribe(view: BaseContract.View) {
+        super.unsubscribe(view)
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe
+    fun onModifyFavoriteEvent(event: ModifyFavoriteEvent) {
+        val index = mToilets!!.indexOf(event.toilet)
+        if (mFavoritesOnly) {
+            mToilets!!.removeAt(index)
+            mView?.notifyitemRemoved(index)
+        } else {
+            mToilets!![index].isFavorite = event.toilet.isFavorite
+            mView?.notifyItemModified(index)
+        }
+    }
 
     override fun retrieveToiletsList(favorites: Boolean, myPosition: LatLng?) {
+        mFavoritesOnly = favorites
         mMyPosition = myPosition
-        mGetFavoritesUseCase.execute(GetFavoritesSubscriber(favorites))
+        mGetFavoritesUseCase.execute(GetFavoritesSubscriber())
     }
 
     override fun getToiletsList(): ArrayList<ToiletsBean>? {
@@ -119,6 +147,11 @@ class ListPresenter(router: ListContract.Router,
     inner class FavoriteSubscriber(private var toilet: ToiletsBean) : ResourceObserver<Void>() {
         override fun onComplete() {
             toilet.isFavorite = !toilet.isFavorite
+            if (!toilet.isFavorite && mFavoritesOnly) {
+                val index = mToilets!!.indexOf(toilet)
+                mToilets!!.removeAt(index)
+                mView?.notifyitemRemoved(index)
+            }
         }
 
         override fun onNext(t: Void) {
@@ -131,8 +164,7 @@ class ListPresenter(router: ListContract.Router,
 
     }
 
-    inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?,
-                                     private val showFavoritesOnly: Boolean) : ResourceObserver<ArrayList<ToiletsBean>>() {
+    inner class GetToiletsSubscriber(private val favorites: List<FavoriteBean>?) : ResourceObserver<ArrayList<ToiletsBean>>() {
         override fun onComplete() {
             // Nothing to do
         }
@@ -140,7 +172,7 @@ class ListPresenter(router: ListContract.Router,
         override fun onNext(toilets: ArrayList<ToiletsBean>) {
             mToilets = toilets
             favorites?.let {
-                checkFavorites(mToilets!!, favorites, showFavoritesOnly)
+                checkFavorites(mToilets!!, favorites, mFavoritesOnly)
             }
 
             mMyPosition?.let {
@@ -157,18 +189,18 @@ class ListPresenter(router: ListContract.Router,
         }
     }
 
-    inner class GetFavoritesSubscriber(private var showFavoritesOnly: Boolean) : ResourceObserver<List<FavoriteBean>>() {
+    inner class GetFavoritesSubscriber : ResourceObserver<List<FavoriteBean>>() {
         override fun onComplete() {
             // Nothing to do
         }
 
         override fun onNext(favorites: List<FavoriteBean>) {
-            mGetToiletsUseCase.execute(GetToiletsSubscriber(favorites, showFavoritesOnly))
+            mGetToiletsUseCase.execute(GetToiletsSubscriber(favorites))
         }
 
         override fun onError(e: Throwable) {
             //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            mGetToiletsUseCase.execute(GetToiletsSubscriber(null, showFavoritesOnly))
+            mGetToiletsUseCase.execute(GetToiletsSubscriber(null))
         }
 
     }

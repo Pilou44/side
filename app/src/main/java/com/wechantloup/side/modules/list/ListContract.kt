@@ -8,6 +8,8 @@ interface ListContract {
 
     interface View: BaseContract.View {
         fun notifyToiletsListRetrieved()
+        fun notifyItemModified(position: Int)
+        fun notifyitemRemoved(position: Int)
     }
 
     interface Presenter: BaseContract.Presenter {

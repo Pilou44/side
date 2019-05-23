@@ -22,6 +22,8 @@ class HomePresenter(router: HomeContract.Router,
         private var TAG = HomePresenter::class.java.simpleName
     }
 
+    private var mToilets: ArrayList<ToiletsBean>? = null
+
     override fun subscribe(view: BaseContract.View) {
         super.subscribe(view)
         EventBus.getDefault().register(this)
@@ -38,8 +40,6 @@ class HomePresenter(router: HomeContract.Router,
         mToilets!![index].isFavorite = event.toilet.isFavorite
         mView?.notifyItemModified()
     }
-
-    private var mToilets: ArrayList<ToiletsBean>? = null
 
     override fun openToilet(toilet: ToiletsBean) {
         mRouter?.openToilet(mView!!, toilet)

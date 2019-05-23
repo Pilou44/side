@@ -22,20 +22,22 @@ class ListAdapter(private val mPresenter: ListContract.Presenter): RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ToiletsViewHolder, position: Int) {
-        val toilets =  mPresenter.getToiletsList()!![position]
-        holder.itemView.address.text = toilets.getAddress()
-        holder.itemView.administrator.text = toilets.getAdministrator()
-        holder.itemView.opening_time.text = toilets.getOpening()
-        holder.itemView.favorite.isChecked = toilets.isFavorite
-        holder.itemView.favorite.setOnCheckedChangeListener { _, isChecked -> mPresenter.setFavorite(toilets, isChecked)}
+        val toilet =  mPresenter.getToiletsList()!![position]
+        holder.itemView.address.text = toilet.getAddress()
+        holder.itemView.administrator.text = toilet.getAdministrator()
+        holder.itemView.opening_time.text = toilet.getOpening()
+        holder.itemView.favorite.isChecked = toilet.isFavorite
+        holder.itemView.favorite.setOnCheckedChangeListener { _, isChecked -> mPresenter.setFavorite(toilet, isChecked)}
 
-        if (toilets.distanceToMe >= 0) {
+        if (toilet.distanceToMe >= 0) {
             holder.itemView.distance.visibility = View.VISIBLE
-            val distance = holder.itemView.context.getString(R.string.distance, toilets.distanceToMe.toInt())
+            val distance = holder.itemView.context.getString(R.string.distance, toilet.distanceToMe.toInt())
             holder.itemView.distance.text = distance
         } else {
             holder.itemView.distance.visibility = View.GONE
         }
+
+        holder.itemView.setOnClickListener{ mPresenter.showDetails(toilet)}
     }
 
     inner class ToiletsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)

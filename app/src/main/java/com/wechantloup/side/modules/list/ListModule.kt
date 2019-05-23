@@ -13,10 +13,17 @@ class ListModule {
 
     @Provides
     @PerApplicationView
-    internal fun provideListPresenter(getToiletsUseCase: GetToiletsUseCase,
+    internal fun provideListPresenter(router: ListContract.Router,
+                                      getToiletsUseCase: GetToiletsUseCase,
                                       getFavoritesUseCase: GetFavoritesUseCase,
                                       addFavoriteUseCase: AddFavoriteUseCase,
                                       removeFavoriteUseCase: RemoveFavoriteUseCase): ListContract.Presenter {
-        return ListPresenter(getToiletsUseCase, getFavoritesUseCase, addFavoriteUseCase, removeFavoriteUseCase)
+        return ListPresenter(router, getToiletsUseCase, getFavoritesUseCase, addFavoriteUseCase, removeFavoriteUseCase)
+    }
+
+    @Provides
+    @PerApplicationView
+    internal fun provideListRouter(): ListContract.Router {
+        return ListRouter()
     }
 }

@@ -9,19 +9,18 @@ import com.wechantloup.side.domain.usecase.AddFavoriteUseCase
 import com.wechantloup.side.domain.usecase.GetFavoritesUseCase
 import com.wechantloup.side.domain.usecase.GetToiletsUseCase
 import com.wechantloup.side.domain.usecase.RemoveFavoriteUseCase
-import com.wechantloup.side.modules.core.BaseContract
 import com.wechantloup.side.modules.core.BasePresenter
 import com.wechantloup.side.utils.calculateDistance
 import io.reactivex.observers.ResourceObserver
 import java.util.*
 import kotlin.collections.ArrayList
-import java.lang.Exception
 
-class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
+class ListPresenter(router: ListContract.Router,
+                    private val mGetToiletsUseCase: GetToiletsUseCase,
                     private val mGetFavoritesUseCase: GetFavoritesUseCase,
                     private val mAddFavoriteUseCase: AddFavoriteUseCase,
                     private val mRemoveFavoriteUseCase: RemoveFavoriteUseCase):
-    BasePresenter<BaseContract.Router, ListContract.View>(null), ListContract.Presenter {
+    BasePresenter<ListContract.Router, ListContract.View>(router), ListContract.Presenter {
 
     companion object {
         private var TAG = ListPresenter::class.java.simpleName
@@ -58,6 +57,10 @@ class ListPresenter(private val mGetToiletsUseCase: GetToiletsUseCase,
             true -> mAddFavoriteUseCase.execute(FavoriteSubscriber(toilet), FavoriteBean(toilet.id))
             false -> mRemoveFavoriteUseCase.execute(FavoriteSubscriber(toilet), FavoriteBean(toilet.id))
         }
+    }
+
+    override fun showDetails(toilet: ToiletsBean) {
+        mRouter?.openToilet(mView!!, toilet)
     }
 
     override fun sortByDistance() {

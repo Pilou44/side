@@ -16,5 +16,10 @@ interface ListContract {
         fun setFavorite(toilet: ToiletsBean, favorite: Boolean)
         fun sortByDistance()
         fun sortByOpens()
+        fun showDetails(toilet: ToiletsBean)
+    }
+
+    interface Router: BaseContract.Router {
+        fun openToilet(view: View, toilet: ToiletsBean)
     }
 }

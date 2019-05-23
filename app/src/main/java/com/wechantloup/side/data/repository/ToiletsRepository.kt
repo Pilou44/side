@@ -6,6 +6,7 @@ import com.wechantloup.side.domain.bean.ToiletsListBean
 import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.http.GET
+import retrofit2.http.Query
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,7 +20,7 @@ constructor(retrofit: Retrofit, dataBase: DataBase) {
     private var mToiletsDao: DataBase.ToiletsDao = dataBase.toiletsDao()
 
     fun getToilets(): Observable<ToiletsListBean> {
-        return mService.getToilets()
+        return mService.getToilets("sanisettesparis2011", 1000)
     }
 
     fun saveToilets(list: List<ToiletBean>) {
@@ -32,7 +33,7 @@ constructor(retrofit: Retrofit, dataBase: DataBase) {
     }
 
     private interface ToiletsService {
-        @GET("search/?dataset=sanisettesparis2011&rows=1000")
-        fun getToilets(): Observable<ToiletsListBean>
+        @GET("search/")
+        fun getToilets(@Query(value = "dataset") dataset: String, @Query(value = "rows") rows: Int ): Observable<ToiletsListBean>
     }
 }

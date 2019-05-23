@@ -1,0 +1,13 @@
+<resources>
+    <string name="refresh_button">Rafraîchir</string>
+    <string name="show_list_button">Afficher la liste</string>
+    <string name="share_button">Partager</string>
+    <string name="share_with">Partager via</string>
+    <string name="favorites">Favoris</string>
+    <string name="sort_by_distance">Trier par distance</string>
+    <string name="sort_button">Trier…</string>
+    <string name="opens_first">Ouverts en premier</string>
+    <string name="distance">À %d m</string>
+    <string name="error">Une erreur s\'est produite</string>
+    <string name="no_toilet">Aucun toilette trouvé</string>
+</resources>

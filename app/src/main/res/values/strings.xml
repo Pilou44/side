@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Side</string>
+    <string name="app_name" translatable="false">Pooh Pooh Pee Do</string>
     <string name="refresh_button">Refresh</string>
     <string name="show_list_button">Show list</string>
     <string name="share_button">Share</string>

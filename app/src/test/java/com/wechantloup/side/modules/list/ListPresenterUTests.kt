@@ -2,6 +2,8 @@ package com.wechantloup.side.modules.list
 
 import com.google.android.gms.maps.model.LatLng
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.domain.usecase.AddFavoriteUseCase
 import com.wechantloup.side.domain.usecase.GetFavoritesUseCase
@@ -81,6 +83,68 @@ class CompanyReviewPresenterUTest {
 
         // Verify
         verify(mView).notifyToiletsListRetrieved()
+        verifyNoMoreInteractions(mView)
+    }
+
+    @Test
+    fun retrieveToiletsList_error() {
+        // Given
+        doAnswer { invocation ->
+            val subscriber = invocation.arguments[0] as ListPresenter.GetFavoritesSubscriber
+            subscriber.onNext(emptyList())
+            null
+        }.`when`(mGetFavoritesUseCase).execute(any<ListPresenter.GetFavoritesSubscriber>())
+
+        doAnswer { invocation ->
+            val subscriber = invocation.arguments[0] as ListPresenter.GetToiletsSubscriber
+            subscriber.onError(Throwable())
+            null
+        }.`when`(mGetToiletsUseCase).execute(any<ListPresenter.GetToiletsSubscriber>())
+
+        // When
+        mPresenter.retrieveToiletsList()
+
+        // Verify
+        verify(mView).notifyToiletsListRetrieved()
+        verify(mView).notifyError()
+        verifyNoMoreInteractions(mView)
+    }
+
+    @Test
+    fun retrieveFavorites_success() {
+        // Given
+        doAnswer { invocation ->
+            val subscriber = invocation.arguments[0] as ListPresenter.GetFavoritesSubscriber
+            subscriber.onNext(emptyList())
+            null
+        }.`when`(mGetFavoritesUseCase).execute(any<ListPresenter.GetFavoritesSubscriber>())
+
+        // When
+        mPresenter.retrieveToiletsList()
+
+        // Verify
+        verify(mGetToiletsUseCase).execute(any<ListPresenter.GetToiletsSubscriber>())
+        verifyNoMoreInteractions(mGetToiletsUseCase)
+        verifyZeroInteractions(mView)
+    }
+
+    @Test
+    fun retrieveFavorites_error() {
+        // Given
+        doAnswer { invocation ->
+            val subscriber = invocation.arguments[0] as ListPresenter.GetFavoritesSubscriber
+            subscriber.onError(Throwable())
+            null
+        }.`when`(mGetFavoritesUseCase).execute(any<ListPresenter.GetFavoritesSubscriber>())
+
+        // When
+        mPresenter.retrieveToiletsList()
+
+        // Verify
+        verify(mGetToiletsUseCase).execute(any<ListPresenter.GetToiletsSubscriber>())
+        verifyNoMoreInteractions(mGetToiletsUseCase)
+        verify(mView).notifyError()
+        verifyNoMoreInteractions(mView)
     }
 
     @Test
@@ -101,6 +165,26 @@ class CompanyReviewPresenterUTest {
     }
 
     @Test
+    fun addFavorite_error() {
+        // Given
+        val toilet = ToiletBean()
+        doAnswer { invocation ->
+            val subscriber = invocation.arguments[0] as ListPresenter.FavoriteSubscriber
+            subscriber.onError(Throwable())
+            null
+        }.`when`(mAddFavoriteUseCase).execute(any<ListPresenter.FavoriteSubscriber>(), any())
+
+        // When
+        mPresenter.setFavorite(toilet)
+
+        // Verify
+        assert(!toilet.isFavorite)
+        verify(mView).notifyItemModified(any())
+        verify(mView).notifyError()
+        verifyNoMoreInteractions(mView)
+    }
+
+    @Test
     fun removeFavorite_success() {
         // Given
         val toilet = ToiletBean()
@@ -116,5 +200,26 @@ class CompanyReviewPresenterUTest {
 
         // Verify
         assert(!toilet.isFavorite)
+    }
+
+    @Test
+    fun removeFavorite_error() {
+        // Given
+        val toilet = ToiletBean()
+        toilet.isFavorite = true
+        doAnswer { invocation ->
+            val subscriber = invocation.arguments[0] as ListPresenter.FavoriteSubscriber
+            subscriber.onError(Throwable())
+            null
+        }.`when`(mRemoveFavoriteUseCase).execute(any<ListPresenter.FavoriteSubscriber>(), any())
+
+        // When
+        mPresenter.setFavorite(toilet)
+
+        // Verify
+        assert(toilet.isFavorite)
+        verify(mView).notifyItemModified(any())
+        verify(mView).notifyError()
+        verifyNoMoreInteractions(mView)
     }
 }

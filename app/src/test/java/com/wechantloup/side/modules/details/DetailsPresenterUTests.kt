@@ -1,6 +1,8 @@
 package com.wechantloup.side.modules.details
 
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
 import com.wechantloup.side.domain.bean.ToiletBean
 import com.wechantloup.side.domain.usecase.AddFavoriteUseCase
 import com.wechantloup.side.domain.usecase.RemoveFavoriteUseCase
@@ -9,7 +11,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito
+import org.mockito.Mockito.doAnswer
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnit
 
 class CompanyReviewPresenterUTest {
@@ -54,7 +57,7 @@ class CompanyReviewPresenterUTest {
         // Given
         val toilet = ToiletBean()
         mPresenter.setToilet(toilet)
-        Mockito.doAnswer { invocation ->
+        doAnswer { invocation ->
             val subscriber = invocation.arguments[0] as DetailsPresenter.FavoriteSubscriber
             subscriber.onComplete()
             null
@@ -65,6 +68,28 @@ class CompanyReviewPresenterUTest {
 
         // Verify
         assert(toilet.isFavorite)
+        verifyZeroInteractions(mView)
+    }
+
+    @Test
+    fun addFavorite_error() {
+        // Given
+        val toilet = ToiletBean()
+        mPresenter.setToilet(toilet)
+        doAnswer { invocation ->
+            val subscriber = invocation.arguments[0] as DetailsPresenter.FavoriteSubscriber
+            subscriber.onError(Throwable())
+            null
+        }.`when`(mAddFavoriteUseCase).execute(any<DetailsPresenter.FavoriteSubscriber>(), any())
+
+        // When
+        mPresenter.setFavorite(true)
+
+        // Verify
+        assert(!toilet.isFavorite)
+        verify(mView).notifyErrorModifyingFavorite(toilet)
+        verify(mView).notifyError()
+        verifyNoMoreInteractions(mView)
     }
 
     @Test
@@ -73,7 +98,7 @@ class CompanyReviewPresenterUTest {
         val toilet = ToiletBean()
         toilet.isFavorite = true
         mPresenter.setToilet(toilet)
-        Mockito.doAnswer { invocation ->
+        doAnswer { invocation ->
             val subscriber = invocation.arguments[0] as DetailsPresenter.FavoriteSubscriber
             subscriber.onComplete()
             null
@@ -84,5 +109,28 @@ class CompanyReviewPresenterUTest {
 
         // Verify
         assert(!toilet.isFavorite)
+        verifyZeroInteractions(mView)
+    }
+
+    @Test
+    fun removeFavorite_error() {
+        // Given
+        val toilet = ToiletBean()
+        toilet.isFavorite = true
+        mPresenter.setToilet(toilet)
+        doAnswer { invocation ->
+            val subscriber = invocation.arguments[0] as DetailsPresenter.FavoriteSubscriber
+            subscriber.onError(Throwable())
+            null
+        }.`when`(mRemoveFavoriteUseCase).execute(any<DetailsPresenter.FavoriteSubscriber>(), any())
+
+        // When
+        mPresenter.setFavorite(false)
+
+        // Verify
+        assert(toilet.isFavorite)
+        verify(mView).notifyErrorModifyingFavorite(toilet)
+        verify(mView).notifyError()
+        verifyNoMoreInteractions(mView)
     }
 }

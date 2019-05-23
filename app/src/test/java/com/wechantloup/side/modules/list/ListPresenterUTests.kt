@@ -25,6 +25,9 @@ class CompanyReviewPresenterUTest {
     private lateinit var mView: ListContract.View
 
     @Mock
+    private lateinit var mRouter: ListContract.Router
+
+    @Mock
     private lateinit var mGetToiletsUseCase: GetToiletsUseCase
 
     @Mock
@@ -43,6 +46,7 @@ class CompanyReviewPresenterUTest {
     fun setUp() {
 
         mPresenter = ListPresenter(
+            mRouter,
             mGetToiletsUseCase,
             mGetFavoritesUseCase,
             mAddFavoriteUseCase,
@@ -90,7 +94,7 @@ class CompanyReviewPresenterUTest {
         }.`when`(mAddFavoriteUseCase).execute(any<ListPresenter.FavoriteSubscriber>(), any())
 
         // When
-        mPresenter.setFavorite(toilet, true)
+        mPresenter.setFavorite(toilet)
 
         // Verify
         assert(toilet.isFavorite)
@@ -108,7 +112,7 @@ class CompanyReviewPresenterUTest {
         }.`when`(mRemoveFavoriteUseCase).execute(any<ListPresenter.FavoriteSubscriber>(), any())
 
         // When
-        mPresenter.setFavorite(toilet, false)
+        mPresenter.setFavorite(toilet)
 
         // Verify
         assert(!toilet.isFavorite)

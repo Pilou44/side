@@ -103,7 +103,7 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
         val position = LatLng(location.latitude, location.longitude)
         if (mPositionMarker == null) {
             mPositionMarker = mMap?.addMarker(MarkerOptions().position(position).icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
-            mMap?.moveCamera(CameraUpdateFactory.newLatLng(position))
+            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 12.0f))
         } else {
             mPositionMarker?.position = position
         }
@@ -138,8 +138,10 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             val location = mLocationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            val position = LatLng(location.latitude, location.longitude)
-            mPositionMarker = mMap?.addMarker(MarkerOptions().position(position).icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
+            location?.let {
+                val position = LatLng(location.latitude, location.longitude)
+                mPositionMarker = mMap?.addMarker(MarkerOptions().position(position).icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
+            }
         }
     }
 

@@ -44,6 +44,8 @@ class ListActivity: BaseActivity(), ListContract.View {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        swipe.setOnRefreshListener { mPresenter.retrieveToiletsList(favorites, myPosition) }
     }
 
     override fun onDestroy() {
@@ -60,6 +62,7 @@ class ListActivity: BaseActivity(), ListContract.View {
     }
 
     override fun notifyToiletsListRetrieved() {
+        swipe.isRefreshing = false
         mAdapter.notifyDataSetChanged()
     }
 

@@ -37,6 +37,8 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
     private var mLocationManager: LocationManager? = null
     private var mPositionMarker: Marker? = null
     private var mDataReady = false
+    private var mMapReady = false
+    private var mMoveOnFirstPosition = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +59,7 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
         }
 
         if (savedInstanceState == null) {
+            mMoveOnFirstPosition = true
             mPresenter.retrieveToiletsList()
         }
     }
@@ -91,6 +94,7 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
     }
 
     override fun onMapReady(map: GoogleMap?) {
+        mMapReady = true
         mMap = map
         mMap!!.setInfoWindowAdapter(CustomInfoWindowAdapter(this))
         mMap!!.setOnInfoWindowClickListener(this)
@@ -103,7 +107,9 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
         val position = LatLng(location.latitude, location.longitude)
         if (mPositionMarker == null) {
             mPositionMarker = mMap?.addMarker(MarkerOptions().position(position).icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
-            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 12.0f))
+            if (mMoveOnFirstPosition) {
+                mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 12.0f))
+            }
         } else {
             mPositionMarker?.position = position
         }
@@ -123,13 +129,14 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
 
     override fun notifyToiletsListRetrieved() {
         mDataReady = true
-        mMap?.let {
+        if (mMapReady) {
             displayToilets()
         }
     }
 
     private fun displayToilets() {
         mMap?.clear()
+        val goToPosition = mPositionMarker == null
         mPositionMarker = null
         val toilets = mPresenter.getToiletsList()
         for (toilet in toilets!!) {
@@ -141,6 +148,9 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
             location?.let {
                 val position = LatLng(location.latitude, location.longitude)
                 mPositionMarker = mMap?.addMarker(MarkerOptions().position(position).icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
+                if (goToPosition && mMoveOnFirstPosition) {
+                    mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 12.0f))
+                }
             }
         }
     }
@@ -179,7 +189,9 @@ class HomeActivity: BaseActivity<HomeContract.Presenter>(), HomeContract.View, O
 
     private fun refresh() {
         mMap?.clear()
-        mPositionMarker = null
+        mPositionMarker?.let {
+            mPositionMarker = mMap?.addMarker(MarkerOptions().position(mPositionMarker!!.position!!).icon(BitmapDescriptorFactory.fromResource(R.drawable.position_marker)))
+        }
         mPresenter.retrieveToiletsList()
     }
 

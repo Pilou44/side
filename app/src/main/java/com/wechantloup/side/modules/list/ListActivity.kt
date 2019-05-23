@@ -51,6 +51,10 @@ class ListActivity: BaseActivity<ListContract.Presenter>(), ListContract.View {
         mAdapter.notifyItemRemoved(position)
     }
 
+    override fun notifyItemInserted(position: Int) {
+        mAdapter.notifyItemInserted(position)
+    }
+
     override fun notifyToiletsListRetrieved() {
         swipe.isRefreshing = false
         if (mPresenter.getToiletsList().isNullOrEmpty()) {

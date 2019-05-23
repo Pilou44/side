@@ -53,8 +53,13 @@ class ListPresenter(router: ListContract.Router,
     fun onModifyFavoriteEvent(event: ModifyFavoriteEvent) {
         val index = mToilets.indexOf(event.toilet)
         if (mFavoritesOnly) {
-            mToilets.removeAt(index)
-            mView?.notifyItemRemoved(index)
+            if (index >= 0 && !event.toilet.isFavorite) {
+                mToilets.removeAt(index)
+                mView?.notifyItemRemoved(index)
+            } else if (index < 0 && event.toilet.isFavorite) {
+                mToilets.add(event.toilet)
+                mView?.notifyItemInserted(mToilets.indexOf(event.toilet))
+            }
         } else {
             mToilets[index].isFavorite = event.toilet.isFavorite
             mView?.notifyItemModified(index)
